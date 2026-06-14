@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login & Registrasi — Al-Mabrur Travel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=DM+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* ==================== ROOT & GLOBAL ==================== */
+:root {
+  --hijau:     #0A3622;
+  --hijau-2:   #0F4D31;
+  --hijau-3:   #165C3A;
+  --hijau-4:   #1E7A4E;
+  --emas:      #C9A84C;
+  --krim:      #FDFAF3;
+  --putih:     #FFFFFF;
+  --abu-50:    #F7F9F7;
+  --abu-200:   #D4DFDA;
+  --abu-400:   #8FA89A;
+  --abu-600:   #4D6A5E;
+  --abu-800:   #1C3529;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--krim);
+  color: var(--abu-800);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; }
+.arabic { font-family: 'Amiri', serif; }
+
+/* ==================== LOGIN LAYOUT ==================== */
+#loginPage {
+  min-height: 100vh;
+  background: var(--hijau);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#loginPage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(201,168,76,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(201,168,76,0.06) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(201,168,76,0.03) 30px, rgba(201,168,76,0.03) 31px),
+    repeating-linear-gradient(-45deg, transparent, transparent 30px, rgba(201,168,76,0.03) 30px, rgba(201,168,76,0.03) 31px);
+}
+
+.login-split {
+  display: flex;
+  width: 860px;
+  max-width: 96vw;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+  position: relative;
+  z-index: 1;
+}
+
+.login-left {
+  background: var(--hijau-2);
+  padding: 52px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid rgba(201,168,76,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 50%; transform: translateX(-50%);
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.1) 0%, transparent 70%);
+}
+
+.login-mosque-icon {
+  width: 80px; height: 80px;
+  background: rgba(201,168,76,0.12);
+  border: 2px solid rgba(201,168,76,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  color: var(--emas);
+  margin-bottom: 20px;
+}
+
+.login-left h2 { font-size: 28px; color: #fff; margin-bottom: 6px; font-style: italic; }
+.login-left .arabic-text { font-family: 'Amiri', serif; font-size: 22px; color: var(--emas); margin-bottom: 16px; direction: rtl; }
+.login-left p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+.login-left .badge-reg { display: inline-block; background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--emas); font-size: 11px; padding: 5px 14px; border-radius: 999px; margin-top: 20px; letter-spacing: 0.05em; font-weight: 600; }
+
+.features { margin-top: 28px; text-align: left; width: 100%; }
+.login-feature { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.55); font-size: 13px; margin-bottom: 10px; }
+.login-feature i { color: var(--emas); font-size: 14px; width: 18px; }
+
+.login-right {
+  background: var(--putih);
+  padding: 52px 44px;
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-right h3 { font-size: 24px; color: var(--hijau); margin-bottom: 6px; }
+.login-right .sub { font-size: 13px; color: var(--abu-400); margin-bottom: 24px; font-family: 'DM Sans', sans-serif; }
+
+.lbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--abu-600); margin-bottom: 7px; }
+.linput-wrap { position: relative; margin-bottom: 18px; }
+.linput-wrap .ico { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--abu-400); font-size: 14px; }
+.linput { width: 100%; border: 1.5px solid var(--abu-200); border-radius: 10px; padding: 11px 14px 11px 38px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--abu-800); outline: none; transition: all 0.2s; background: var(--abu-50); }
+.linput:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); background: #fff; }
+.eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--abu-400); cursor: pointer; font-size: 14px; }
+
+.login-btn-main { width: 100%; background: var(--hijau); color: #fff; border: none; border-radius: 10px; padding: 13px; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 8px; letter-spacing: 0.02em; }
+.login-btn-main:hover { background: var(--hijau-2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(10,54,34,0.35); }
+
+.alert-box { border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none; align-items: center; gap: 8px; }
+.alert-err { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; }
+.alert-succ { background: #F0FDF4; border: 1px solid #A7F3D0; color: #15803D; }
+
+.login-hint { text-align: center; margin-top: 20px; font-size: 13px; color: var(--abu-600); }
+.login-hint a { color: var(--hijau-4); text-decoration: none; font-weight: 600; }
+.login-hint a:hover { text-decoration: underline; }
+
+@media(max-width:680px) {
+  .login-left { display: none; }
+  .login-right { width: 100%; }
+  .login-split { width: 100%; border-radius: 0; }
+}
+</style>
+</head>
+<body>
+
+<div id="loginPage">
+  <div class="login-split">
+    <div class="login-left">
+      <div class="login-mosque-icon"><i class="fas fa-mosque"></i></div>
+      <div class="arabic-text">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <h2>Al-Mabrur Travel</h2>
+      <p>Sistem Manajemen Perjalanan Umroh & Haji Terpercaya sejak 2010</p>
+      <span class="badge-reg">✓ Terdaftar Kemenag RI</span>
+
+      <div class="features">
+        <div class="login-feature"><i class="fas fa-check-circle"></i> Kelola data jamaah lengkap</div>
+        <div class="login-feature"><i class="fas fa-check-circle"></i> Upload dokumen & paspor digital</div>
+        <div class="login-feature"><i class="fas fa-check-circle"></i> Tanda tangan kontrak digital</div>
+        <div class="login-feature"><i class="fas fa-check-circle"></i> Ekspor data Excel / PDF</div>
+        <div class="login-feature"><i class="fas fa-check-circle"></i> Manajemen paket umroh</div>
+      </div>
+    </div>
+
+    <div class="login-right">
+
+      <div id="loginSection">
+        <h3>Masuk ke Sistem</h3>
+        <p class="sub">Silakan masukkan kredensial Anda</p>
+
+        <div class="alert-box alert-err" id="loginErr"><i class="fas fa-exclamation-circle"></i> <span>Email atau password salah</span></div>
+        <div class="alert-box alert-succ" id="loginSucc"><i class="fas fa-check-circle"></i> <span>Registrasi berhasil! Silakan login.</span></div>
+
+        <label class="lbl">Email Akun</label>
+        <div class="linput-wrap">
+          <i class="fas fa-envelope ico"></i>
+          <input type="email" class="linput" id="lEmail" placeholder="email@contoh.com">
+        </div>
+
+        <label class="lbl">Password</label>
+        <div class="linput-wrap">
+          <i class="fas fa-lock ico"></i>
+          <input type="password" class="linput" id="lPass" placeholder="••••••••">
+          <button class="eye-btn" onclick="togglePwd('lPass', 'eyeIco1')"><i class="fas fa-eye" id="eyeIco1"></i></button>
+        </div>
+
+        <button class="login-btn-main" onclick="doLogin()">
+          <i class="fas fa-sign-in-alt" style="margin-right:8px;"></i>Masuk ke Dashboard
+        </button>
+        <p class="login-hint">
+          Belum punya akun? <a href="#" onclick="toggleView('register')">Daftar di sini</a>
+        </p>
+      </div>
+
+      <div id="registerSection" style="display:none;">
+        <h3>Daftar Akun Baru</h3>
+        <p class="sub">Buat akun untuk mengakses sistem</p>
+
+        <div class="alert-box alert-err" id="regErr"><i class="fas fa-exclamation-circle"></i> <span id="regErrMsg">Pesan error</span></div>
+
+        <label class="lbl">Nama Lengkap</label>
+        <div class="linput-wrap">
+          <i class="fas fa-user ico"></i>
+          <input type="text" class="linput" id="rNama" placeholder="Nama Anda">
+        </div>
+
+        <label class="lbl">Email</label>
+        <div class="linput-wrap">
+          <i class="fas fa-envelope ico"></i>
+          <input type="email" class="linput" id="rEmail" placeholder="email@contoh.com">
+        </div>
+
+        <label class="lbl">Password</label>
+        <div class="linput-wrap">
+          <i class="fas fa-lock ico"></i>
+          <input type="password" class="linput" id="rPass" placeholder="••••••••">
+          <button class="eye-btn" onclick="togglePwd('rPass', 'eyeIco2')"><i class="fas fa-eye" id="eyeIco2"></i></button>
+        </div>
+
+        <button class="login-btn-main" onclick="doRegister()">
+          <i class="fas fa-user-plus" style="margin-right:8px;"></i>Daftar Sekarang
+        </button>
+
+        <p class="login-hint">
+          Sudah punya akun? <a href="#" onclick="toggleView('login')">Masuk di sini</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* -------- LOGIC: TOGGLE VIEW (Login <-> Register) -------- */
+function toggleView(view) {
+  // Sembunyikan semua alert saat pindah halaman
+  document.getElementById('loginErr').style.display = 'none';
+  document.getElementById('loginSucc').style.display = 'none';
+  document.getElementById('regErr').style.display = 'none';
+
+  if (view === 'register') {
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('registerSection').style.display = 'block';
+  } else {
+    document.getElementById('registerSection').style.display = 'none';
+    document.getElementById('loginSection').style.display = 'block';
+  }
+}
+
+/* -------- LOGIC: TOGGLE PASSWORD VISIBILITY -------- */
+function togglePwd(inputId, iconId) {
+  const f = document.getElementById(inputId);
+  const i = document.getElementById(iconId);
+  f.type = f.type === 'password' ? 'text' : 'password';
+  i.className = f.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+}
+
+/* -------- LOGIC: REGISTRASI (Simpan ke LocalStorage) -------- */
+function doRegister() {
+  const nama = document.getElementById('rNama').value.trim();
+  const email = document.getElementById('rEmail').value.trim();
+  const pass = document.getElementById('rPass').value;
+  
+  const errBox = document.getElementById('regErr');
+  const errMsg = document.getElementById('regErrMsg');
+
+  // Validasi Kosong
+  if (!nama || !email || !pass) {
+    errMsg.textContent = 'Semua kolom (Nama, Email, Password) wajib diisi!';
+    errBox.style.display = 'flex';
+    return;
+  }
+
+  // Ambil data users dari LocalStorage (atau buat array kosong jika belum ada)
+  let users = JSON.parse(localStorage.getItem('almabrur_users')) || [];
+
+  // Cek apakah email sudah terdaftar (termasuk email demo)
+  if (users.find(u => u.email === email) || email === 'admin@almabrur.com') {
+    errMsg.textContent = 'Email ini sudah terdaftar!';
+    errBox.style.display = 'flex';
+    return;
+  }
+
+  // Simpan user baru ke array
+  users.push({ nama: nama, email: email, password: pass });
+  localStorage.setItem('almabrur_users', JSON.stringify(users));
+
+  // Reset form registrasi
+  document.getElementById('rNama').value = '';
+  document.getElementById('rEmail').value = '';
+  document.getElementById('rPass').value = '';
+
+  // Pindah ke tampilan Login dan tampilkan pesan sukses
+  toggleView('login');
+  document.getElementById('loginSucc').style.display = 'flex';
+  
+  // Otomatis isikan email yang baru didaftarkan ke form login
+  document.getElementById('lEmail').value = email;
+}
+
+/* -------- LOGIC: LOGIN (Cek dari LocalStorage) -------- */
+function doLogin() {
+  const email = document.getElementById('lEmail').value.trim();
+  const pass = document.getElementById('lPass').value;
+  const errBox = document.getElementById('loginErr');
+  
+  document.getElementById('loginSucc').style.display = 'none';
+  errBox.style.display = 'none';
+
+  // 1. Cek jika menggunakan akun DEMO bawaan
+  if (email === 'admin@almabrur.com' && pass === 'admin123') {
+    // Simpan sesi aktif
+    localStorage.setItem('almabrur_session', JSON.stringify({
+      nama: 'Admin Mabrur', 
+      email: email, 
+      role: 'Super Administrator'
+    }));
+    window.location.href = 'dashboard.html';
+    return;
+  }
+
+  // 2. Cek akun dari LocalStorage (akun yang dibuat melalui Registrasi)
+  let users = JSON.parse(localStorage.getItem('almabrur_users')) || [];
+  let validUser = users.find(u => u.email === email && u.password === pass);
+
+  if (validUser) {
+    // Simpan sesi aktif
+    localStorage.setItem('almabrur_session', JSON.stringify({
+      nama: validUser.nama, 
+      email: validUser.email, 
+      role: 'Administrator'
+    }));
+    window.location.href = 'dashboard.html';
+  } else {
+    // Jika tidak ditemukan/salah
+    errBox.style.display = 'flex';
+  }
+}
+
+// Fitur Enter untuk submit login
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    // Cek form mana yang sedang terbuka
+    if (document.getElementById('loginSection').style.display !== 'none') {
+      doLogin();
+    } else {
+      doRegister();
+    }
+  }
+});
+</script>
+
+</body>
+</html>

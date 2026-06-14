@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dokumen & Kontrak — Al-Mabrur Travel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=DM+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ==================== ROOT & GLOBAL ==================== */
+:root {
+  --hijau:     #0A3622;
+  --hijau-2:   #0F4D31;
+  --hijau-3:   #165C3A;
+  --hijau-4:   #1E7A4E;
+  --hijau-mid: #2D9B68;
+  --hijau-lt:  #D1FAE5;
+  --emas:      #C9A84C;
+  --emas-2:    #B5913A;
+  --emas-lt:   #FEF3CD;
+  --krim:      #FDFAF3;
+  --krim-2:    #F5EFD8;
+  --putih:     #FFFFFF;
+  --abu-50:    #F7F9F7;
+  --abu-100:   #EBF0EB;
+  --abu-200:   #D4DFDA;
+  --abu-400:   #8FA89A;
+  --abu-600:   #4D6A5E;
+  --abu-800:   #1C3529;
+  --merah:     #DC2626;
+  --sidebar-w: 270px;
+  --header-h:  64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--krim);
+  color: var(--abu-800);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; }
+.arabic { font-family: 'Amiri', serif; }
+a { text-decoration: none; }
+
+/* ==================== APP LAYOUT ==================== */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--hijau);
+  z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+}
+.sidebar::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px),
+    repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+  pointer-events: none;
+}
+.sidebar-brand { padding: 22px 22px 18px; border-bottom: 1px solid rgba(201,168,76,0.18); position: relative; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.brand-emblem { width: 42px; height: 42px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--emas); flex-shrink: 0; }
+.brand-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px; color: #fff; line-height: 1.2; }
+.brand-tagline { font-size: 10.5px; color: rgba(255,255,255,0.4); font-weight: 300; margin-top: 1px; }
+
+.sidebar-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+.nav-section-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.22); padding: 10px 12px 5px; }
+
+.nav-item { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.55); cursor: pointer; font-size: 13.5px; font-weight: 500; transition: all 0.18s; margin-bottom: 2px; user-select: none; position: relative; }
+.nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.nav-item.active { background: var(--emas); color: var(--hijau); font-weight: 600; }
+.nav-item.active i { color: var(--hijau); }
+.nav-chip { margin-left: auto; background: rgba(201,168,76,0.2); color: var(--emas); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(201,168,76,0.25); }
+.nav-item.active .nav-chip { background: rgba(10,54,34,0.2); color: var(--hijau); border-color: rgba(10,54,34,0.15); }
+
+.sidebar-footer { padding: 14px 12px 18px; border-top: 1px solid rgba(201,168,76,0.15); position: relative; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.user-row:hover { background: rgba(255,255,255,0.06); }
+.user-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--hijau); flex-shrink: 0; border: 2px solid rgba(201,168,76,0.3); }
+.user-name { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.2; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); }
+.user-logout { margin-left: auto; color: rgba(255,255,255,0.28); font-size: 15px; transition: color 0.15s; }
+.user-row:hover .user-logout { color: #F87171; }
+
+.topbar { position: fixed; left: var(--sidebar-w); right: 0; top: 0; height: var(--header-h); background: var(--putih); border-bottom: 1px solid var(--abu-100); display: flex; align-items: center; padding: 0 28px; z-index: 50; gap: 14px; }
+.topbar-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--hijau); }
+.topbar-crumb { font-size: 12px; color: var(--abu-400); margin-top: 1px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-btn { width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--abu-100); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--abu-600); cursor: pointer; font-size: 14px; transition: all 0.15s; position: relative; }
+.tb-btn:hover { background: var(--abu-50); color: var(--hijau); border-color: var(--abu-200); }
+.tb-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--emas); border-radius: 50%; border: 1.5px solid #fff; }
+.tb-user-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; background: var(--hijau); border-radius: 999px; cursor: pointer; }
+.tb-user-chip .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--hijau); }
+.tb-user-chip span { font-size: 13px; font-weight: 600; color: #fff; }
+
+.main { margin-left: var(--sidebar-w); padding: 28px; padding-top: calc(var(--header-h) + 28px); min-height: 100vh; }
+.ccard { background: var(--putih); border: 1px solid var(--abu-100); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.ccard-head { padding: 16px 22px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--abu-100); }
+.ccard-head h3 { font-size: 15.5px; font-weight: 600; color: var(--hijau); flex: 1; margin: 0; }
+.ccard-head .head-orn { color: var(--emas); font-size: 18px; }
+.ccard-body { padding: 22px; }
+
+/* ==================== BUTTONS ==================== */
+.btn-g { background: var(--hijau); color: #fff; border: none; border-radius: 9px; padding: 9px 18px; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-g:hover { background: var(--hijau-2); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,54,34,0.25); color: #fff; }
+.btn-out { background: #fff; color: var(--abu-800); border: 1.5px solid var(--abu-200); border-radius: 9px; padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-out:hover { background: var(--abu-50); border-color: var(--abu-400); }
+.btn-sm-gold { background: var(--emas-lt); color: var(--emas-2); border: 1px solid #F5DFA0; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-gold:hover { background: #FEE9A0; color: var(--emas-2); }
+
+/* ==================== FORMS & MODALS ==================== */
+.flbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--abu-600); margin-bottom: 7px; }
+.finput { width: 100%; border: 1.5px solid var(--abu-200); border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--abu-800); background: var(--abu-50); outline: none; transition: all 0.18s; }
+.finput:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); background: #fff; }
+select.finput { cursor: pointer; }
+.fgroup { margin-bottom: 16px; }
+
+.modal-content { border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.2); }
+.mhead { background: var(--hijau); padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: none; position: relative; }
+.mhead::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: rgba(201,168,76,0.2); }
+.mhead-ico { width: 38px; height: 38px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--emas); }
+.mhead h5 { font-size: 16px; font-weight: 700; color: #fff; margin: 0; }
+.mhead p { font-size: 11.5px; color: rgba(255,255,255,0.4); margin: 1px 0 0; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.mclose { margin-left: auto; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13px; transition: all 0.15s; }
+.mclose:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.mbody { padding: 24px; }
+.mfoot { padding: 16px 24px; background: var(--krim); border-top: 1px solid var(--abu-100); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ==================== FILE UPLOAD ==================== */
+.fupload { border: 2px dashed var(--abu-200); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--krim); position: relative; }
+.fupload:hover, .fupload.on { border-color: var(--hijau-4); background: #F0FDF4; }
+.fupload input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.fup-ico { font-size: 30px; color: var(--abu-400); margin-bottom: 10px; display: block; }
+.fup-txt { font-size: 13.5px; color: var(--abu-600); }
+.fup-hint { font-size: 12px; color: var(--abu-400); margin-top: 4px; }
+
+.fpgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px,1fr)); gap: 10px; margin-top: 14px; }
+.fitem { background: #fff; border: 1.5px solid var(--abu-100); border-radius: 10px; padding: 10px 8px; text-align: center; position: relative; transition: all 0.15s; }
+.fitem:hover { border-color: var(--hijau-mid); }
+.fitem .fdel { position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; background: var(--merah); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; color: #fff; border: 2px solid #fff; z-index: 1; }
+.fitem-ico { font-size: 24px; margin-bottom: 5px; }
+.fi-img { color: #2563EB; } .fi-pdf { color: var(--merah); } .fi-doc { color: #1D6DB0; } .fi-gen { color: var(--abu-400); }
+.fitem-name { font-size: 10px; color: var(--abu-600); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; display: block; }
+.fitem-sz   { font-size: 10px; color: var(--abu-400); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--abu-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--abu-400); }
+
+@media(max-width:768px) {
+  .sidebar { transform: translateX(-100%); }
+  .topbar, .main { left: 0 !important; margin-left: 0 !important; }
+}
+</style>
+</head>
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-row">
+        <div class="brand-emblem"><i class="fas fa-mosque"></i></div>
+        <div>
+          <div class="brand-name">Al-Mabrur Travel</div>
+          <div class="brand-tagline">Sistem Manajemen Umroh</div>
+        </div>
+      </div>
+      <div class="brand-arabic">السفر إلى بيت الله</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-lbl">Utama</div>
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="jamaah.html" class="nav-item">
+        <i class="fas fa-users"></i> Data Jamaah
+        <span class="nav-chip" id="navChipGlobal">0</span>
+      </a>
+      <a href="paket.html" class="nav-item">
+        <i class="fas fa-suitcase-rolling"></i> Paket Umroh
+      </a>
+
+      <div class="nav-section-lbl">Administrasi</div>
+      <a href="dokumen.html" class="nav-item active">
+        <i class="fas fa-file-contract"></i> Dokumen & Kontrak
+      </a>
+      <a href="ttd.html" class="nav-item">
+        <i class="fas fa-signature"></i> Tanda Tangan Digital
+      </a>
+
+      <div class="nav-section-lbl">Akun</div>
+      <a href="profil.html" class="nav-item">
+        <i class="fas fa-user-circle"></i> Profil Admin
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-row" onclick="doLogout()">
+        <div class="user-av">AM</div>
+        <div>
+          <div class="user-name">Admin Mabrur</div>
+          <div class="user-role">Super Administrator</div>
+        </div>
+        <i class="fas fa-sign-out-alt user-logout"></i>
+      </div>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <div>
+      <div class="topbar-title">Dokumen & Kontrak</div>
+      <div class="topbar-crumb">Beranda / Dokumen</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-btn" title="Notifikasi"><i class="fas fa-bell"></i><div class="tb-dot"></div></div>
+      <div class="tb-btn" title="Pengaturan"><i class="fas fa-cog"></i></div>
+      <div class="tb-user-chip"><div class="av">AM</div><span>Admin</span></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="ccard">
+      <div class="ccard-head">
+        <i class="fas fa-file-contract head-orn"></i>
+        <h3>Manajemen Dokumen Jamaah</h3>
+        <button class="btn-g" style="margin-left:auto;" onclick="openUploadDok()">
+          <i class="fas fa-upload"></i> Upload Dokumen
+        </button>
+      </div>
+      <div class="ccard-body">
+        <div id="dokumenList"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="mFiles" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-folder-open"></i></div>
+          <div><h5>Dokumen Jamaah</h5><p id="mFileSub">Daftar file terupload</p></div>
+          <button class="mclose" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody" id="mFilesBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mUpDok" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-upload"></i></div>
+          <div><h5>Upload Dokumen</h5><p>Unggah dokumen untuk kelengkapan jamaah</p></div>
+          <button class="mclose" onclick="closeModal('mUpDok')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody">
+          <div class="fgroup">
+            <label class="flbl">Pilih Jamaah</label>
+            <select class="finput" id="udJamaah">
+              <option value="">-- Pilih Jamaah --</option>
+              </select>
+          </div>
+          <div class="fgroup">
+            <label class="flbl">Jenis Dokumen</label>
+            <select class="finput" id="udJenis">
+              <option>Paspor</option>
+              <option>KTP</option>
+              <option>Kartu Keluarga</option>
+              <option>Foto 4x6</option>
+              <option>Vaksin Meningitis</option>
+              <option>Buku Nikah</option>
+              <option>Lainnya</option>
+            </select>
+          </div>
+          <div class="fupload" id="udArea">
+            <input type="file" multiple id="udInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleUdUpload(this.files)">
+            <i class="fas fa-cloud-upload-alt fup-ico"></i>
+            <div class="fup-txt"><strong>Klik atau drag & drop</strong> dokumen ke sini</div>
+            <div class="fup-hint">PDF, JPG, PNG, DOC — maks 10MB</div>
+          </div>
+          <div class="fpgrid" id="udGrid"></div>
+        </div>
+        <div class="mfoot">
+          <button class="btn-out" onclick="closeModal('mUpDok')"><i class="fas fa-times"></i> Batal</button>
+          <button class="btn-g" onclick="simpanDokumen()"><i class="fas fa-save"></i> Simpan File</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* -------- VARIABEL GLOBAL -------- */
+    let jamaah = []; // Akan diisi dari database via API
+    let actualFiles = []; // Array untuk menampung file fisik (objek File)
+    let uploadedFilesUI = []; // Array string untuk render UI nama-nama file
+
+    /* -------- UTILS -------- */
+    function inits(n) { return n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : 'XX'; }
+    function fmtSz(b) { if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+    function closeModal(id) { bootstrap.Modal.getInstance(document.getElementById(id))?.hide(); }
+    function doLogout() { if(confirm('Yakin ingin keluar?')) window.location.href='login.html'; }
+
+    function toast(msg,type) {
+      const cfg={s:{bg:'#F0FDF4',border:'#A7F3D0',txt:'#15803D',ico:'check-circle'},d:{bg:'#FEF2F2',border:'#FECACA',txt:'#B91C1C',ico:'trash-alt'}};
+      const c=cfg[type]||cfg.s;
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;bottom:24px;right:24px;background:${c.bg};color:${c.txt};border:1px solid ${c.border};border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.12);transition:all 0.3s;max-width:320px;`;
+      el.innerHTML=`<i class="fas fa-${c.ico}"></i>${msg}`;
+      document.body.appendChild(el);
+      setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';},2800);
+      setTimeout(()=>el.remove(),3200);
+    }
+
+    /* -------- FETCH DATA DARI API -------- */
+    function loadDataDokumen() {
+      fetch('api_dokumen.php?action=list')
+        .then(response => response.json())
+        .then(data => {
+          jamaah = data;
+          renderDokumenList();
+          populateUdJamaah();
+          
+          // Update badge sidebar
+          const navChip = document.getElementById('navChipGlobal');
+          if(navChip) navChip.textContent = jamaah.length;
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    /* -------- RENDER DOKUMEN LIST -------- */
+    function renderDokumenList() {
+      const el = document.getElementById('dokumenList');
+      const list = jamaah.filter(j => j.files && j.files.length > 0);
+      
+      if(!list.length) {
+        el.innerHTML = `<div style="text-align:center;padding:40px;color:var(--abu-400);"><i class="fas fa-folder-open" style="font-size:48px;margin-bottom:12px;display:block;"></i><div style="font-size:16px;font-weight:600;font-family:'Playfair Display',serif;">Belum ada dokumen terupload</div></div>`;
+        return;
+      }
+      
+      el.innerHTML = list.map(j => `
+        <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--abu-100);">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--hijau-lt);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--hijau-4);flex-shrink:0;">${inits(j.nama)}</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:13.5px;">${j.nama}</div>
+            <div style="display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;">
+              ${j.files.map(f => `<span style="background:var(--krim-2);color:var(--emas-2);border:1px solid #F5DFA0;font-size:11px;padding:2px 8px;border-radius:5px;">${f.split('__')[0]}</span>`).join('')}
+            </div>
+          </div>
+          <button class="btn-sm-gold" onclick="lihatFiles(${j.id})"><i class="fas fa-folder-open"></i> ${j.files.length} file</button>
+        </div>`).join('');
+    }
+
+    /* -------- POPULATE SELECT & MODAL UPLOAD -------- */
+    function populateUdJamaah() {
+      const sel = document.getElementById('udJamaah');
+      sel.innerHTML = '<option value="">-- Pilih Jamaah --</option>' + 
+        jamaah.map(j => `<option value="${j.id}">${j.nama}</option>`).join('');
+    }
+
+    function openUploadDok() {
+      actualFiles = [];
+      uploadedFilesUI = [];
+      document.getElementById('udJamaah').value = '';
+      document.getElementById('udJenis').value = 'Paspor';
+      document.getElementById('udGrid').innerHTML = '';
+      new bootstrap.Modal(document.getElementById('mUpDok')).show();
+    }
+
+    /* -------- HANDLE UPLOAD LOGIC -------- */
+    function handleUdUpload(files) {
+      const jenis = document.getElementById('udJenis').value;
+      
+      Array.from(files).forEach(f => {
+        // Simpan referensi ke file fisik dan jenisnya
+        actualFiles.push({ file: f, jenis: jenis }); 
+        // Simpan label untuk tampilan UI Modal
+        uploadedFilesUI.push(`[${jenis}] ` + f.name + '__' + fmtSz(f.size));
+      });
+      
+      renderUdGrid();
+    }
+
+    function renderUdGrid() {
+      document.getElementById('udGrid').innerHTML = uploadedFilesUI.map((f, i) => {
+        const name = f.split('__')[0];
+        const sz = f.split('__')[1] || '';
+        return fileItem(name, sz, i, 'removeUdFile');
+      }).join('');
+    }
+
+    function removeUdFile(i) {
+      actualFiles.splice(i, 1);
+      uploadedFilesUI.splice(i, 1);
+      renderUdGrid();
+    }
+
+    function fileItem(name, sz, i, fn) {
+      const ext = name.split('.').pop().toLowerCase();
+      let ico = 'fas fa-file fi-gen';
+      if(['jpg','jpeg','png','gif'].includes(ext)) ico = 'fas fa-file-image fi-img';
+      else if(ext==='pdf') ico = 'fas fa-file-pdf fi-pdf';
+      else if(['doc','docx'].includes(ext)) ico = 'fas fa-file-word fi-doc';
+      else if(['xls','xlsx'].includes(ext)) ico = 'fas fa-file-excel fi-xls';
+      
+      return `<div class="fitem">
+        <div class="fdel" onclick="${fn}(${i})"><i class="fas fa-times" style="font-size:8px;"></i></div>
+        <div class="fitem-ico"><i class="${ico}"></i></div>
+        <span class="fitem-name" title="${name}">${name}</span>
+        <span class="fitem-sz">${sz}</span>
+      </div>`;
+    }
+
+    function simpanDokumen() {
+      const jid = document.getElementById('udJamaah').value;
+      if(!jid) { alert('Pilih jamaah terlebih dahulu!'); return; }
+      if(!actualFiles.length) { alert('Upload minimal satu file!'); return; }
+      
+      // Bungkus data dengan FormData untuk mengirim file fisik ke PHP
+      const formData = new FormData();
+      formData.append('id', jid);
+      
+      actualFiles.forEach((obj) => {
+        formData.append('files[]', obj.file);
+        formData.append('jenis[]', obj.jenis);
+      });
+
+      fetch('api_dokumen.php?action=upload', {
+        method: 'POST',
+        body: formData // JANGAN letakkan headers Content-Type di sini jika pakai FormData
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          closeModal('mUpDok');
+          loadDataDokumen(); // Muat ulang data dari database
+          toast('Dokumen berhasil diupload!', 's');
+        } else {
+          alert('Gagal mengupload dokumen! Error: ' + res.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error uploading:', error);
+        alert('Terjadi kesalahan pada sistem.');
+      });
+    }
+
+    /* -------- VIEW FILES -------- */
+    function lihatFiles(id) {
+      const j = jamaah.find(x => x.id == id);
+      if(!j) return;
+      
+      document.getElementById('mFileSub').textContent = `Dokumen: ${j.nama}`;
+      const body = document.getElementById('mFilesBody');
+      const filesArr = j.files || [];
+      
+      if(!filesArr.length) {
+        body.innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--abu-400);"><i class="fas fa-folder-open" style="font-size:40px;margin-bottom:12px;display:block;"></i>Belum ada dokumen yang diupload</div>`;
+      } else {
+        body.innerHTML = filesArr.map(f => {
+          const fullLabel = f.split('__')[0]; // Format: "[KTP] 1718000_namafile.jpg"
+          
+          // Pisahkan nama asli untuk tautan unduhan
+          const parts = fullLabel.split('] '); 
+          const fileName = parts.length > 1 ? parts[1] : parts[0]; 
+          const fileUrl = 'uploads/' + encodeURIComponent(fileName);
+
+          return `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--krim);border-radius:9px;margin-bottom:8px;border:1px solid var(--abu-100);">
+            <i class="${fileIcon(f)}" style="font-size:20px;width:22px;text-align:center;"></i>
+            <span style="font-size:13.5px;flex:1;">${fullLabel}</span>
+            <a href="${fileUrl}" target="_blank" class="btn-sm-gold" style="font-size:12px;padding:5px 10px;text-decoration:none;"><i class="fas fa-download"></i></a>
+          </div>`;
+        }).join('');
+      }
+      new bootstrap.Modal(document.getElementById('mFiles')).show();
+    }
+
+    function fileIcon(name) {
+      const ext = name.split('.').pop().toLowerCase();
+      if(['jpg','jpeg','png'].includes(ext)) return 'fas fa-file-image fi-img';
+      if(ext==='pdf') return 'fas fa-file-pdf fi-pdf';
+      if(['doc','docx'].includes(ext)) return 'fas fa-file-word fi-doc';
+      return 'fas fa-file fi-gen';
+    }
+
+    /* -------- INITIALIZATION -------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDataDokumen();
+    });
+  </script>
+</body>
+</html>

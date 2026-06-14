@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profil Admin — Al-Mabrur Travel</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=DM+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ==================== ROOT & GLOBAL ==================== */
+:root {
+  --hijau:     #0A3622;
+  --hijau-2:   #0F4D31;
+  --hijau-3:   #165C3A;
+  --hijau-4:   #1E7A4E;
+  --hijau-mid: #2D9B68;
+  --hijau-lt:  #D1FAE5;
+  --emas:      #C9A84C;
+  --emas-2:    #B5913A;
+  --emas-lt:   #FEF3CD;
+  --krim:      #FDFAF3;
+  --krim-2:    #F5EFD8;
+  --putih:     #FFFFFF;
+  --abu-50:    #F7F9F7;
+  --abu-100:   #EBF0EB;
+  --abu-200:   #D4DFDA;
+  --abu-400:   #8FA89A;
+  --abu-600:   #4D6A5E;
+  --abu-800:   #1C3529;
+  --merah:     #DC2626;
+  --sidebar-w: 270px;
+  --header-h:  64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--krim);
+  color: var(--abu-800);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; }
+a { text-decoration: none; }
+
+/* ==================== APP LAYOUT ==================== */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--hijau);
+  z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+}
+.sidebar::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px),
+    repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+  pointer-events: none;
+}
+.sidebar-brand { padding: 22px 22px 18px; border-bottom: 1px solid rgba(201,168,76,0.18); position: relative; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.brand-emblem { width: 42px; height: 42px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--emas); flex-shrink: 0; }
+.brand-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px; color: #fff; line-height: 1.2; }
+.brand-tagline { font-size: 10.5px; color: rgba(255,255,255,0.4); font-weight: 300; margin-top: 1px; }
+
+.sidebar-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+.nav-section-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.22); padding: 10px 12px 5px; }
+
+.nav-item { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.55); cursor: pointer; font-size: 13.5px; font-weight: 500; transition: all 0.18s; margin-bottom: 2px; user-select: none; position: relative; }
+.nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.nav-item.active { background: var(--emas); color: var(--hijau); font-weight: 600; }
+.nav-item.active i { color: var(--hijau); }
+.nav-chip { margin-left: auto; background: rgba(201,168,76,0.2); color: var(--emas); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(201,168,76,0.25); }
+.nav-item.active .nav-chip { background: rgba(10,54,34,0.2); color: var(--hijau); border-color: rgba(10,54,34,0.15); }
+
+.sidebar-footer { padding: 14px 12px 18px; border-top: 1px solid rgba(201,168,76,0.15); position: relative; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.user-row:hover { background: rgba(255,255,255,0.06); }
+.user-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--hijau); flex-shrink: 0; border: 2px solid rgba(201,168,76,0.3); }
+.user-name { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.2; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); }
+.user-logout { margin-left: auto; color: rgba(255,255,255,0.28); font-size: 15px; transition: color 0.15s; }
+.user-row:hover .user-logout { color: #F87171; }
+
+.topbar { position: fixed; left: var(--sidebar-w); right: 0; top: 0; height: var(--header-h); background: var(--putih); border-bottom: 1px solid var(--abu-100); display: flex; align-items: center; padding: 0 28px; z-index: 50; gap: 14px; }
+.topbar-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--hijau); }
+.topbar-crumb { font-size: 12px; color: var(--abu-400); margin-top: 1px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-btn { width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--abu-100); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--abu-600); cursor: pointer; font-size: 14px; transition: all 0.15s; position: relative; }
+.tb-btn:hover { background: var(--abu-50); color: var(--hijau); border-color: var(--abu-200); }
+.tb-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--emas); border-radius: 50%; border: 1.5px solid #fff; }
+.tb-user-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; background: var(--hijau); border-radius: 999px; cursor: pointer; }
+.tb-user-chip .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--hijau); }
+.tb-user-chip span { font-size: 13px; font-weight: 600; color: #fff; }
+
+.main { margin-left: var(--sidebar-w); padding: 28px; padding-top: calc(var(--header-h) + 28px); min-height: 100vh; }
+.ccard { background: var(--putih); border: 1px solid var(--abu-100); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.ccard-head { padding: 16px 22px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--abu-100); }
+.ccard-head h3 { font-size: 15.5px; font-weight: 600; color: var(--hijau); flex: 1; margin: 0; }
+.ccard-head .head-orn { color: var(--emas); font-size: 18px; }
+.ccard-body { padding: 22px; }
+
+/* ==================== BUTTONS ==================== */
+.btn-g { background: var(--hijau); color: #fff; border: none; border-radius: 9px; padding: 9px 18px; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-g:hover { background: var(--hijau-2); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,54,34,0.25); color: #fff; }
+.btn-out { background: #fff; color: var(--abu-800); border: 1.5px solid var(--abu-200); border-radius: 9px; padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-out:hover { background: var(--abu-50); border-color: var(--abu-400); }
+
+/* ==================== FORMS ==================== */
+.flbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--abu-600); margin-bottom: 7px; }
+.finput { width: 100%; border: 1.5px solid var(--abu-200); border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--abu-800); background: var(--abu-50); outline: none; transition: all 0.18s; }
+.finput:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); background: #fff; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.fgroup { margin-bottom: 16px; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--abu-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--abu-400); }
+
+@media(max-width:768px) {
+  .sidebar { transform: translateX(-100%); }
+  .topbar, .main { left: 0 !important; margin-left: 0 !important; }
+  .frow { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-row">
+        <div class="brand-emblem"><i class="fas fa-mosque"></i></div>
+        <div>
+          <div class="brand-name">Al-Mabrur Travel</div>
+          <div class="brand-tagline">Sistem Manajemen Umroh</div>
+        </div>
+      </div>
+      <div class="brand-arabic">السفر إلى بيت الله</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-lbl">Utama</div>
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="jamaah.html" class="nav-item">
+        <i class="fas fa-users"></i> Data Jamaah
+        <span class="nav-chip" id="navChipGlobal">8</span>
+      </a>
+      <a href="paket.html" class="nav-item">
+        <i class="fas fa-suitcase-rolling"></i> Paket Umroh
+      </a>
+
+      <div class="nav-section-lbl">Administrasi</div>
+      <a href="dokumen.html" class="nav-item">
+        <i class="fas fa-file-contract"></i> Dokumen & Kontrak
+      </a>
+      <a href="ttd.html" class="nav-item">
+        <i class="fas fa-signature"></i> Tanda Tangan Digital
+      </a>
+
+      <div class="nav-section-lbl">Akun</div>
+      <!-- Active state di menu Profil Admin -->
+      <a href="profil.html" class="nav-item active">
+        <i class="fas fa-user-circle"></i> Profil Admin
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-row" onclick="doLogout()">
+        <div class="user-av">AM</div>
+        <div>
+          <div class="user-name">Admin Mabrur</div>
+          <div class="user-role">Super Administrator</div>
+        </div>
+        <i class="fas fa-sign-out-alt user-logout"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div>
+      <div class="topbar-title">Profil Admin</div>
+      <div class="topbar-crumb">Beranda / Profil</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-btn" title="Notifikasi"><i class="fas fa-bell"></i><div class="tb-dot"></div></div>
+      <div class="tb-btn" title="Pengaturan"><i class="fas fa-cog"></i></div>
+      <div class="tb-user-chip"><div class="av">AM</div><span>Admin</span></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div style="background:var(--hijau);border-radius:20px;padding:32px;display:flex;align-items:center;gap:20px;margin-bottom:20px;position:relative;overflow:hidden;">
+      <div style="position:absolute;right:-20px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,0.15) 0%,transparent 70%);"></div>
+      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--emas),#8B6914);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--hijau);border:3px solid rgba(201,168,76,0.3);flex-shrink:0;position:relative;z-index:1;">AM</div>
+      <div style="position:relative;z-index:1;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;">Admin Al-Mabrur</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5);">admin@almabrur.com</div>
+        <span style="display:inline-block;background:var(--emas);color:var(--hijau);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-top:6px;">Super Administrator</span>
+      </div>
+    </div>
+
+    <div class="ccard">
+      <div class="ccard-head">
+        <i class="fas fa-id-card head-orn"></i>
+        <h3>Informasi Akun</h3>
+      </div>
+      <div class="ccard-body">
+        <div class="frow">
+          <div class="fgroup"><label class="flbl">Nama Lengkap</label><input class="finput" id="pNama" value="Admin Al-Mabrur Travel"></div>
+          <div class="fgroup"><label class="flbl">Email</label><input class="finput" id="pEmail" value="admin@almabrur.com"></div>
+          <div class="fgroup"><label class="flbl">Telepon</label><input class="finput" id="pTelp" value="+62 812-3456-7890"></div>
+          <div class="fgroup"><label class="flbl">Nomor Izin PPIU</label><input class="finput" id="pPpiu" value="PPIU-2024-1234"></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:4px;">
+          <button class="btn-g" onclick="simpanProfil()"><i class="fas fa-save"></i> Simpan</button>
+          <button class="btn-out" onclick="gantiPassword()"><i class="fas fa-key"></i> Ganti Password</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================= CORE SCRIPTS ========================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    /* -------- UTILS -------- */
+    function toast(msg,type) {
+      const cfg={s:{bg:'#F0FDF4',border:'#A7F3D0',txt:'#15803D',ico:'check-circle'},i:{bg:'#EFF6FF',border:'#BFDBFE',txt:'#1D4ED8',ico:'info-circle'}};
+      const c=cfg[type]||cfg.s;
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;bottom:24px;right:24px;background:${c.bg};color:${c.txt};border:1px solid ${c.border};border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.12);transition:all 0.3s;max-width:320px;`;
+      el.innerHTML=`<i class="fas fa-${c.ico}"></i>${msg}`;
+      document.body.appendChild(el);
+      setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';},2800);
+      setTimeout(()=>el.remove(),3200);
+    }
+    
+    function doLogout() { 
+      if(confirm('Yakin ingin keluar?')) window.location.href='login.html'; 
+    }
+
+    /* -------- ACTIONS -------- */
+    function simpanProfil() {
+      // Mock simpan profil
+      toast('Perubahan informasi akun berhasil disimpan!', 's');
+    }
+
+    function gantiPassword() {
+      // Mock ganti password
+      alert('Fitur ganti password akan membuka modal keamanan akun.');
+    }
+  </script>
+</body>
+</html>

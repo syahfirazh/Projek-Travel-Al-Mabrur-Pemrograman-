@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Jamaah — Al-Mabrur Travel</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=DM+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ==================== ROOT & GLOBAL ==================== */
+:root {
+  --hijau:     #0A3622;
+  --hijau-2:   #0F4D31;
+  --hijau-3:   #165C3A;
+  --hijau-4:   #1E7A4E;
+  --hijau-mid: #2D9B68;
+  --hijau-lt:  #D1FAE5;
+  --emas:      #C9A84C;
+  --emas-2:    #B5913A;
+  --emas-lt:   #FEF3CD;
+  --krim:      #FDFAF3;
+  --krim-2:    #F5EFD8;
+  --putih:     #FFFFFF;
+  --abu-50:    #F7F9F7;
+  --abu-100:   #EBF0EB;
+  --abu-200:   #D4DFDA;
+  --abu-400:   #8FA89A;
+  --abu-600:   #4D6A5E;
+  --abu-800:   #1C3529;
+  --merah:     #DC2626;
+  --sidebar-w: 270px;
+  --header-h:  64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--krim);
+  color: var(--abu-800);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; }
+.arabic { font-family: 'Amiri', serif; }
+a { text-decoration: none; }
+
+/* ==================== APP LAYOUT ==================== */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--hijau);
+  z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+}
+.sidebar::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px),
+    repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+  pointer-events: none;
+}
+.sidebar-brand { padding: 22px 22px 18px; border-bottom: 1px solid rgba(201,168,76,0.18); position: relative; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.brand-emblem {
+  width: 42px; height: 42px; background: rgba(201,168,76,0.15);
+  border: 1.5px solid rgba(201,168,76,0.4); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--emas); flex-shrink: 0;
+}
+.brand-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px; color: #fff; line-height: 1.2; }
+.brand-tagline { font-size: 10.5px; color: rgba(255,255,255,0.4); font-weight: 300; margin-top: 1px; }
+.brand-arabic { font-family: 'Amiri', serif; font-size: 14px; color: var(--emas); direction: rtl; text-align: center; margin-top: 10px; opacity: 0.8; }
+
+.sidebar-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+.nav-section-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.22); padding: 10px 12px 5px; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 11px; padding: 10px 12px;
+  border-radius: 10px; color: rgba(255,255,255,0.55);
+  cursor: pointer; font-size: 13.5px; font-weight: 500;
+  transition: all 0.18s; margin-bottom: 2px; user-select: none; position: relative;
+}
+.nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.nav-item.active { background: var(--emas); color: var(--hijau); font-weight: 600; }
+.nav-item.active i { color: var(--hijau); }
+.nav-chip {
+  margin-left: auto; background: rgba(201,168,76,0.2); color: var(--emas);
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(201,168,76,0.25);
+}
+.nav-item.active .nav-chip { background: rgba(10,54,34,0.2); color: var(--hijau); border-color: rgba(10,54,34,0.15); }
+
+.sidebar-footer { padding: 14px 12px 18px; border-top: 1px solid rgba(201,168,76,0.15); position: relative; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.user-row:hover { background: rgba(255,255,255,0.06); }
+.user-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--hijau); flex-shrink: 0; border: 2px solid rgba(201,168,76,0.3); }
+.user-name { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.2; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); }
+.user-logout { margin-left: auto; color: rgba(255,255,255,0.28); font-size: 15px; transition: color 0.15s; }
+.user-row:hover .user-logout { color: #F87171; }
+
+.topbar {
+  position: fixed; left: var(--sidebar-w); right: 0; top: 0; height: var(--header-h);
+  background: var(--putih); border-bottom: 1px solid var(--abu-100);
+  display: flex; align-items: center; padding: 0 28px; z-index: 50; gap: 14px;
+}
+.topbar-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--hijau); }
+.topbar-crumb { font-size: 12px; color: var(--abu-400); margin-top: 1px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-btn { width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--abu-100); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--abu-600); cursor: pointer; font-size: 14px; transition: all 0.15s; position: relative; }
+.tb-btn:hover { background: var(--abu-50); color: var(--hijau); border-color: var(--abu-200); }
+.tb-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--emas); border-radius: 50%; border: 1.5px solid #fff; }
+.tb-user-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; background: var(--hijau); border-radius: 999px; cursor: pointer; }
+.tb-user-chip .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--hijau); }
+.tb-user-chip span { font-size: 13px; font-weight: 600; color: #fff; }
+
+.main { margin-left: var(--sidebar-w); padding: 28px; padding-top: calc(var(--header-h) + 28px); min-height: 100vh; }
+.ccard { background: var(--putih); border: 1px solid var(--abu-100); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.ccard-head { padding: 16px 22px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--abu-100); }
+.ccard-head h3 { font-size: 15.5px; font-weight: 600; color: var(--hijau); flex: 1; margin: 0; }
+.ccard-head .head-orn { color: var(--emas); font-size: 18px; }
+.ccard-body { padding: 22px; }
+
+/* ==================== BUTTONS & BADGES ==================== */
+.btn-g { background: var(--hijau); color: #fff; border: none; border-radius: 9px; padding: 9px 18px; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; letter-spacing: 0.01em; }
+.btn-g:hover { background: var(--hijau-2); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,54,34,0.25); color: #fff; }
+.btn-out { background: #fff; color: var(--abu-800); border: 1.5px solid var(--abu-200); border-radius: 9px; padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-out:hover { background: var(--abu-50); border-color: var(--abu-400); }
+.btn-sm-edit { background: #ECFDF5; color: var(--hijau-4); border: 1px solid #A7F3D0; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-edit:hover { background: #D1FAE5; color: var(--hijau-4); }
+.btn-sm-del { background: #FEF2F2; color: var(--merah); border: 1px solid #FECACA; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-del:hover { background: #FEE2E2; color: var(--merah); }
+.btn-sm-gold { background: var(--emas-lt); color: var(--emas-2); border: 1px solid #F5DFA0; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-gold:hover { background: #FEE9A0; color: var(--emas-2); }
+
+.badge-status { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.bs-lunas     { background: #DCFCE7; color: #15803D; }
+.bs-dp        { background: #FEF3C7; color: #B45309; }
+.bs-proses    { background: #DBEAFE; color: #1D4ED8; }
+.bs-batal     { background: #FEE2E2; color: #B91C1C; }
+
+/* ==================== FORMS & MODALS ==================== */
+.flbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--abu-600); margin-bottom: 7px; }
+.req { color: var(--merah); }
+.finput { width: 100%; border: 1.5px solid var(--abu-200); border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--abu-800); background: var(--abu-50); outline: none; transition: all 0.18s; }
+.finput:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); background: #fff; }
+select.finput { cursor: pointer; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.fgroup { margin-bottom: 16px; }
+
+.modal-content { border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.2); }
+.mhead { background: var(--hijau); padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: none; position: relative; }
+.mhead::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: rgba(201,168,76,0.2); }
+.mhead-ico { width: 38px; height: 38px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--emas); }
+.mhead h5 { font-size: 16px; font-weight: 700; color: #fff; margin: 0; }
+.mhead p { font-size: 11.5px; color: rgba(255,255,255,0.4); margin: 1px 0 0; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.mclose { margin-left: auto; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13px; transition: all 0.15s; }
+.mclose:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.mbody { padding: 24px; }
+.mfoot { padding: 16px 24px; background: var(--krim); border-top: 1px solid var(--abu-100); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ==================== FILE UPLOAD ==================== */
+.fupload { border: 2px dashed var(--abu-200); border-radius: 12px; padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--krim); position: relative; }
+.fupload:hover, .fupload.on { border-color: var(--hijau-4); background: #F0FDF4; }
+.fupload input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.fup-ico { font-size: 30px; color: var(--abu-400); margin-bottom: 10px; display: block; }
+.fup-txt { font-size: 13.5px; color: var(--abu-600); }
+.fup-hint { font-size: 12px; color: var(--abu-400); margin-top: 4px; }
+.fpgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px,1fr)); gap: 10px; margin-top: 14px; }
+.fitem { background: #fff; border: 1.5px solid var(--abu-100); border-radius: 10px; padding: 10px 8px; text-align: center; position: relative; transition: all 0.15s; }
+.fitem:hover { border-color: var(--hijau-mid); }
+.fitem .fdel { position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; background: var(--merah); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 9px; color: #fff; border: 2px solid #fff; z-index: 1; }
+.fitem-ico { font-size: 24px; margin-bottom: 5px; }
+.fi-img { color: #2563EB; } .fi-pdf { color: var(--merah); } .fi-doc { color: #1D6DB0; } .fi-gen { color: var(--abu-400); }
+.fitem-name { font-size: 10px; color: var(--abu-600); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; display: block; }
+.fitem-sz   { font-size: 10px; color: var(--abu-400); }
+
+/* ==================== DATATABLES ==================== */
+table.dataTable thead th { background: var(--krim); color: var(--abu-600); font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1.5px solid var(--abu-100) !important; border-top: none !important; padding: 12px 16px !important; white-space: nowrap; }
+table.dataTable tbody td { padding: 13px 16px !important; border-bottom: 1px solid var(--abu-100) !important; vertical-align: middle; font-size: 13.5px; }
+table.dataTable tbody tr:hover td { background: var(--krim); }
+.dt-buttons { margin-bottom: 0 !important; }
+.dt-buttons .btn { border-radius: 8px !important; font-size: 12px !important; padding: 7px 12px !important; font-weight: 500 !important; border-color: var(--abu-200) !important; color: var(--abu-600) !important; background: #fff !important; }
+.dt-buttons .btn:hover { background: var(--krim) !important; color: var(--hijau) !important; }
+.dataTables_filter input { border: 1.5px solid var(--abu-200); border-radius: 8px; padding: 7px 12px; font-size: 13.5px; outline: none; font-family: 'DM Sans', sans-serif; }
+.dataTables_filter input:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); }
+.dataTables_length select { border: 1.5px solid var(--abu-200); border-radius: 8px; padding: 6px 10px; font-size: 13.5px; outline: none; }
+
+/* CONFIRM DEL */
+.del-ico-wrap { width: 64px; height: 64px; background: #FEE2E2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--merah); margin: 0 auto 16px; }
+
+/* SIGNATURE WRAP */
+.sig-wrap { background: var(--krim); border: 2px solid var(--abu-200); border-radius: 12px; overflow: hidden; position: relative; touch-action: none; }
+.sig-watermark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 0; }
+.sig-watermark span { font-family: 'Amiri', serif; font-size: 18px; color: rgba(10,54,34,0.06); direction: rtl; letter-spacing: 2px; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--abu-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--abu-400); }
+
+@media(max-width:768px) {
+  .sidebar { transform: translateX(-100%); }
+  .topbar, .main { left: 0 !important; margin-left: 0 !important; }
+  .frow { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-row">
+        <div class="brand-emblem"><i class="fas fa-mosque"></i></div>
+        <div>
+          <div class="brand-name">Al-Mabrur Travel</div>
+          <div class="brand-tagline">Sistem Manajemen Umroh</div>
+        </div>
+      </div>
+      <div class="brand-arabic">السفر إلى بيت الله</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-lbl">Utama</div>
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="jamaah.html" class="nav-item active">
+        <i class="fas fa-users"></i> Data Jamaah
+        <span class="nav-chip" id="navChipGlobal">0</span>
+      </a>
+      <a href="paket.html" class="nav-item">
+        <i class="fas fa-suitcase-rolling"></i> Paket Umroh
+      </a>
+
+      <div class="nav-section-lbl">Administrasi</div>
+      <a href="dokumen.html" class="nav-item">
+        <i class="fas fa-file-contract"></i> Dokumen & Kontrak
+      </a>
+      <a href="ttd.html" class="nav-item">
+        <i class="fas fa-signature"></i> Tanda Tangan Digital
+      </a>
+
+      <div class="nav-section-lbl">Akun</div>
+      <a href="profil.html" class="nav-item">
+        <i class="fas fa-user-circle"></i> Profil Admin
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-row" onclick="doLogout()">
+        <div class="user-av">AM</div>
+        <div>
+          <div class="user-name">Admin Mabrur</div>
+          <div class="user-role">Super Administrator</div>
+        </div>
+        <i class="fas fa-sign-out-alt user-logout"></i>
+      </div>
+    </div>
+  </nav>
+
+  <header class="topbar">
+    <div>
+      <div class="topbar-title">Data Jamaah</div>
+      <div class="topbar-crumb">Beranda / Data Jamaah</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-btn" title="Notifikasi"><i class="fas fa-bell"></i><div class="tb-dot"></div></div>
+      <div class="tb-btn" title="Pengaturan"><i class="fas fa-cog"></i></div>
+      <div class="tb-user-chip"><div class="av">AM</div><span>Admin</span></div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="ccard">
+      <div class="ccard-head">
+        <i class="fas fa-users head-orn"></i>
+        <h3>Manajemen Data Jamaah Umroh</h3>
+        <div style="margin-left:auto;display:flex;gap:8px;">
+          <button class="btn-g" onclick="openTambahJamaah()">
+            <i class="fas fa-user-plus"></i> Daftarkan Jamaah
+          </button>
+        </div>
+      </div>
+      <div class="ccard-body">
+        <div style="overflow-x:auto;">
+          <table id="tableJamaah" class="table table-hover w-100">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Nama Jamaah</th>
+                <th>No. Paspor</th>
+                <th>Paket</th>
+                <th>Keberangkatan</th>
+                <th>Pembayaran</th>
+                <th>Dokumen</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="bodyJamaah"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="mJamaah" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-user-plus" id="mJIco"></i></div>
+          <div><h5 id="mJTitle">Pendaftaran Jamaah Baru</h5><p>Isi data jamaah dengan lengkap dan benar</p></div>
+          <button class="mclose" onclick="closeModal('mJamaah')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody">
+          <input type="hidden" id="jEditId">
+
+          <ul class="nav nav-tabs mb-3" style="border-bottom:2px solid var(--abu-100);">
+            <li class="nav-link active" id="tab1" onclick="switchTab(1)" style="cursor:pointer;font-size:13.5px;font-weight:600;color:var(--hijau);border-bottom:2px solid var(--hijau);padding:8px 16px;">
+              <i class="fas fa-user me-2"></i>Data Pribadi
+            </li>
+            <li class="nav-link" id="tab2" onclick="switchTab(2)" style="cursor:pointer;font-size:13.5px;color:var(--abu-400);padding:8px 16px;">
+              <i class="fas fa-file me-2"></i>Upload Dokumen
+            </li>
+          </ul>
+
+          <div id="tabContent1">
+            <div class="frow">
+              <div class="fgroup"><label class="flbl">Nama Lengkap <span class="req">*</span></label><input class="finput" id="jNama" placeholder="Sesuai paspor"></div>
+              <div class="fgroup"><label class="flbl">NIK</label><input class="finput" id="jNik" placeholder="16 digit NIK KTP"></div>
+              <div class="fgroup"><label class="flbl">No. Paspor <span class="req">*</span></label><input class="finput" id="jPaspor" placeholder="A1234567"></div>
+              <div class="fgroup"><label class="flbl">Masa Berlaku Paspor</label><input type="date" class="finput" id="jExpPaspor"></div>
+              <div class="fgroup"><label class="flbl">Jenis Kelamin</label>
+                <select class="finput" id="jKelamin">
+                  <option>Laki-laki</option><option>Perempuan</option>
+                </select>
+              </div>
+              <div class="fgroup"><label class="flbl">Tanggal Lahir</label><input type="date" class="finput" id="jTglLahir"></div>
+              <div class="fgroup"><label class="flbl">Nomor HP <span class="req">*</span></label><input class="finput" id="jHp" placeholder="+62 8xx-xxxx-xxxx"></div>
+              <div class="fgroup"><label class="flbl">Email</label><input class="finput" id="jEmail" placeholder="jamaah@email.com" type="email"></div>
+              <div class="fgroup"><label class="flbl">Paket Umroh <span class="req">*</span></label>
+                <select class="finput" id="jPaket">
+                  <option value="">-- Pilih Paket --</option>
+                  <option>Paket Reguler 9 Hari</option>
+                  <option>Paket Plus 12 Hari</option>
+                  <option>Paket Premium 15 Hari</option>
+                  <option>Paket VIP 15 Hari</option>
+                </select>
+              </div>
+              <div class="fgroup"><label class="flbl">Keberangkatan</label><input type="date" class="finput" id="jBerangkat"></div>
+              <div class="fgroup"><label class="flbl">Status Pembayaran</label>
+                <select class="finput" id="jStatus">
+                  <option value="DP">Uang Muka (DP)</option>
+                  <option value="Lunas">Lunas</option>
+                  <option value="Proses">Dalam Proses</option>
+                  <option value="Batal">Batal</option>
+                </select>
+              </div>
+              <div class="fgroup"><label class="flbl">Mahram / Wali</label><input class="finput" id="jMahram" placeholder="Nama mahram (jika ada)"></div>
+            </div>
+            <div class="fgroup">
+              <label class="flbl">Alamat Lengkap</label>
+              <textarea class="finput" id="jAlamat" rows="2" placeholder="Jl. ..." style="resize:vertical;"></textarea>
+            </div>
+          </div>
+
+          <div id="tabContent2" style="display:none;">
+            <p style="font-size:13px;color:var(--abu-400);margin-bottom:16px;">Upload dokumen jamaah (paspor, KTP, vaksin, foto, dll). Format: PDF, JPG, PNG, DOC</p>
+            <div class="fupload" id="fupArea">
+              <input type="file" multiple id="fupInput" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="handleUpload(this.files)">
+              <i class="fas fa-cloud-upload-alt fup-ico"></i>
+              <div class="fup-txt"><strong>Klik atau drag & drop</strong> file dokumen</div>
+              <div class="fup-hint">KTP, Paspor, Vaksin, Foto 4x6, Kartu Keluarga — maks 10MB</div>
+            </div>
+            <div class="fpgrid" id="fpGrid"></div>
+
+            <div style="margin-top:20px;padding:14px 16px;background:var(--krim-2);border-radius:10px;border:1px solid #F5DFA0;">
+              <div style="font-size:12px;font-weight:600;color:var(--emas-2);margin-bottom:10px;"><i class="fas fa-list-check"></i> Checklist Dokumen Wajib</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;" id="dokChecklist">
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> Paspor (min 6 bulan)</label>
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> KTP / NIK</label>
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> Foto 4x6 latar putih</label>
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> Kartu Keluarga</label>
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> Sertifikat Vaksin Meningitis</label>
+                <label style="display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--abu-600);cursor:pointer;"><input type="checkbox" style="accent-color:var(--hijau);"> Buku Nikah (jika mahram)</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mfoot">
+          <button class="btn-out" onclick="closeModal('mJamaah')"><i class="fas fa-times"></i> Batal</button>
+          <button class="btn-g" onclick="saveJamaah()"><i class="fas fa-save"></i> Simpan Data Jamaah</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mHapus" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mbody" style="text-align:center;padding:32px 24px;">
+          <div class="del-ico-wrap"><i class="fas fa-trash-alt"></i></div>
+          <h5 style="font-weight:700;margin-bottom:8px;">Hapus Data Jamaah?</h5>
+          <p style="color:var(--abu-400);font-size:13.5px;margin-bottom:24px;">
+            Data jamaah <strong id="hapusNama"></strong> akan dihapus permanen.
+          </p>
+          <div style="display:flex;gap:10px;justify-content:center;">
+            <button class="btn-out" data-bs-dismiss="modal"><i class="fas fa-times"></i> Batal</button>
+            <button class="btn-sm-del" style="padding:9px 18px;font-size:13.5px;" onclick="konfirmasiHapus()">
+              <i class="fas fa-trash-alt"></i> Ya, Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mFiles" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-folder-open"></i></div>
+          <div><h5>Dokumen Jamaah</h5><p id="mFileSub">Daftar file terupload</p></div>
+          <button class="mclose" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody" id="mFilesBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="mTTD" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-signature"></i></div>
+          <div><h5>Tanda Tangan Kontrak</h5><p id="mTTDSub">Kontrak Perjalanan Umroh</p></div>
+          <button class="mclose" data-bs-dismiss="modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody">
+          <div class="sig-wrap" style="margin-bottom:12px;">
+            <div class="sig-watermark"><span>بِسْمِ اللَّهِ</span></div>
+            <canvas id="mSigCanvas" style="display:block;width:100%;height:180px;cursor:crosshair;touch-action:none;position:relative;z-index:1;"></canvas>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-out" style="font-size:12px;padding:7px 12px;" onclick="clearMSig()"><i class="fas fa-undo"></i> Hapus</button>
+            <button class="btn-g" style="font-size:12px;padding:7px 12px;margin-left:auto;" onclick="applyMSig()"><i class="fas fa-check"></i> Terapkan Tanda Tangan</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+  <script>
+    /* -------- VARIABEL GLOBAL -------- */
+    let jamaah = []; // Akan diisi dari database
+    let editingJ = null;
+    let hapusId = null;
+    let uploadedFiles = []; // Untuk simpan teks nama file di UI
+    let actualFiles = [];   // Untuk simpan FILE FISIK yang akan dikirim ke PHP
+    let dtJ = null;
+    let activeTab = 1;
+    let mSigCtx = null, mSigDrawing = false;
+    let currentTtdBase64 = ''; // Untuk simpan gambar TTD
+
+    /* -------- UTILS -------- */
+    function inits(n) { return n ? n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : 'XX'; }
+    function fmt(d) { if(!d || d === '0000-00-00') return '—'; const dt=new Date(d); return dt.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}); }
+    function fmtSz(b) { if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+    function closeModal(id) { bootstrap.Modal.getInstance(document.getElementById(id))?.hide(); }
+    function toast(msg,type) {
+      const cfg={s:{bg:'#F0FDF4',border:'#A7F3D0',txt:'#15803D',ico:'check-circle'},d:{bg:'#FEF2F2',border:'#FECACA',txt:'#B91C1C',ico:'trash-alt'}};
+      const c=cfg[type]||cfg.s;
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;bottom:24px;right:24px;background:${c.bg};color:${c.txt};border:1px solid ${c.border};border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.12);transition:all 0.3s;max-width:320px;`;
+      el.innerHTML=`<i class="fas fa-${c.ico}"></i>${msg}`;
+      document.body.appendChild(el);
+      setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';},2800);
+      setTimeout(()=>el.remove(),3200);
+    }
+    function doLogout() { if(confirm('Yakin ingin keluar?')) window.location.href='login.html'; }
+    function getPos(canvas,e) { const r=canvas.getBoundingClientRect(); const sx=canvas.width/r.width, sy=canvas.height/r.height; return [(e.clientX-r.left)*sx,(e.clientY-r.top)*sy]; }
+
+    /* -------- FETCH DATA DARI DATABASE -------- */
+    function loadDataJamaah() {
+      fetch('api_jamaah.php?action=get')
+        .then(response => response.json())
+        .then(data => {
+          jamaah = data; 
+          renderJamaahTable(); 
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    /* -------- RENDER TABEL JAMA'AH -------- */
+    function renderJamaahTable() {
+      const tbody = document.getElementById('bodyJamaah');
+      tbody.innerHTML = '';
+      
+      jamaah.forEach((j,i) => {
+        const bs = {Lunas:'bs-lunas',DP:'bs-dp',Proses:'bs-proses',Batal:'bs-batal'}[j.status]||'bs-proses';
+        const fileCount = j.files ? j.files.length : 0;
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--abu-400);">${String(i+1).padStart(2,'0')}</span></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:50%;background:var(--hijau-lt);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--hijau-4);flex-shrink:0;">${inits(j.nama)}</div>
+              <div>
+                <div style="font-weight:600;font-size:13.5px;">${j.nama}</div>
+                <div style="font-size:11px;color:var(--abu-400);">${j.kelamin || '—'} · ${j.hp}</div>
+              </div>
+            </div>
+          </td>
+          <td><span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--hijau-4);">${j.paspor}</span></td>
+          <td><span style="font-size:12.5px;">${j.paket || '—'}</span></td>
+          <td><span style="font-size:12.5px;">${fmt(j.berangkat)}</span></td>
+          <td><span class="badge-status ${bs}">${j.status || 'Proses'}</span></td>
+          <td>
+            ${fileCount > 0 ? `<button class="btn-sm-gold" onclick="lihatFiles(${j.id})"><i class="fas fa-folder"></i>${fileCount} file</button>`:`<span style="font-size:12px;color:var(--abu-400);">—</span>`}
+          </td>
+          <td>
+            <div style="display:flex;gap:5px;">
+              <button class="btn-sm-gold" onclick="openTTDModal(${j.id})" title="Tanda Tangan Kontrak"><i class="fas fa-signature"></i></button>
+              <button class="btn-sm-edit" onclick="editJamaah(${j.id})" title="Edit Data"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn-sm-del" onclick="hapusJamaah(${j.id})" title="Hapus Data"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+      if(dtJ) { dtJ.destroy(); dtJ = null; }
+      dtJ = $('#tableJamaah').DataTable({
+        dom:"<'row'<'col-sm-6 d-flex align-items-center gap-2'lB><'col-sm-6 d-flex justify-content-end'f>><'row'<'col-12'tr>><'row'<'col-sm-5'i><'col-sm-7 d-flex justify-content-end'p>>",
+        buttons:[
+          {extend:'copy',text:'<i class="fas fa-copy me-1"></i>Copy',className:'btn btn-sm'},
+          {extend:'excel',text:'<i class="fas fa-file-excel me-1"></i>Excel',className:'btn btn-sm',filename:'jamaah-umroh'},
+          {extend:'pdf',text:'<i class="fas fa-file-pdf me-1"></i>PDF',className:'btn btn-sm',filename:'jamaah-umroh',
+            exportOptions:{columns:[0,1,2,3,4,5]},
+            customize:function(doc){ doc.defaultStyle.fontSize=9; doc.styles.tableHeader.fillColor='#0A3622'; doc.styles.tableHeader.color='#FFFFFF'; doc.content[0].text='Data Jamaah Umroh - Al-Mabrur Travel'; doc.content[0].style='header'; }
+          },
+          {extend:'print',text:'<i class="fas fa-print me-1"></i>Print',className:'btn btn-sm'},
+        ],
+        language:{ search:'_INPUT_',searchPlaceholder:'Cari jamaah...', lengthMenu:'Tampilkan _MENU_ data', info:'Data _START_–_END_ dari _TOTAL_ jamaah', paginate:{previous:'‹',next:'›'}, zeroRecords:'Jamaah tidak ditemukan' },
+        pageLength:10, lengthMenu:[[5,10,25,-1],[5,10,25,'Semua']], columnDefs:[{targets:[6,7],orderable:false}], order:[[0,'asc']]
+      });
+      document.getElementById('navChipGlobal').textContent = jamaah.length;
+    }
+
+    /* -------- TAB NAV -------- */
+    function switchTab(n) {
+      activeTab = n;
+      document.getElementById('tabContent1').style.display = n===1 ? 'block':'none';
+      document.getElementById('tabContent2').style.display = n===2 ? 'block':'none';
+      ['tab1','tab2'].forEach((id,i)=>{
+        const el = document.getElementById(id); const act = (i+1===n);
+        el.style.color = act ? 'var(--hijau)' : 'var(--abu-400)';
+        el.style.borderBottom = act ? '2px solid var(--hijau)' : 'none';
+        el.style.fontWeight = act ? '600' : '400';
+      });
+    }
+
+    /* -------- CRUD JAMA'AH -------- */
+    function openTambahJamaah() {
+      editingJ = null; 
+      uploadedFiles = [];
+      actualFiles = []; // Reset array file fisik
+      currentTtdBase64 = ''; // Reset array TTD
+      
+      document.getElementById('jEditId').value = '';
+      document.getElementById('mJTitle').textContent = 'Pendaftaran Jamaah Baru';
+      document.getElementById('mJIco').className = 'fas fa-user-plus';
+      ['jNama','jNik','jPaspor','jHp','jEmail','jMahram','jAlamat','jPaket','jBerangkat','jExpPaspor', 'jTglLahir'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('jKelamin').value='Laki-laki';
+      document.getElementById('jStatus').value='DP';
+      document.getElementById('fpGrid').innerHTML='';
+      switchTab(1);
+      new bootstrap.Modal(document.getElementById('mJamaah')).show();
+    }
+
+    function editJamaah(id) {
+      const j = jamaah.find(x => x.id == id);
+      if(!j) return;
+      editingJ = id; 
+      
+      // Ambil file yang sudah ada dari database
+      uploadedFiles = j.files ? [...j.files] : [];
+      actualFiles = []; // Kosongkan file fisik karena yang lama sudah di server
+      currentTtdBase64 = j.ttd || '';
+      
+      document.getElementById('jEditId').value = id;
+      document.getElementById('mJTitle').textContent = 'Edit Data Jamaah';
+      document.getElementById('mJIco').className = 'fas fa-user-edit';
+      document.getElementById('jNama').value = j.nama || '';
+      document.getElementById('jNik').value = j.nik || '';
+      document.getElementById('jPaspor').value = j.paspor || '';
+      document.getElementById('jExpPaspor').value = j.exp_paspor || '';
+      document.getElementById('jKelamin').value = j.kelamin || 'Laki-laki';
+      document.getElementById('jTglLahir').value = j.tgl_lahir || '';
+      document.getElementById('jHp').value = j.hp || '';
+      document.getElementById('jEmail').value = j.email || '';
+      document.getElementById('jPaket').value = j.paket || '';
+      document.getElementById('jBerangkat').value = j.berangkat || '';
+      document.getElementById('jStatus').value = j.status || 'DP';
+      document.getElementById('jMahram').value = j.mahram || '';
+      document.getElementById('jAlamat').value = j.alamat || '';
+      
+      renderFP();
+      switchTab(1);
+      new bootstrap.Modal(document.getElementById('mJamaah')).show();
+    }
+
+    function saveJamaah() {
+      const nama = document.getElementById('jNama').value.trim();
+      const paspor = document.getElementById('jPaspor').value.trim();
+      const hp = document.getElementById('jHp').value.trim();
+      if(!nama || !paspor || !hp){ alert('Nama, nomor paspor, dan HP wajib diisi!'); return; }
+
+      // Menggunakan FormData untuk mengirim data teks, file, dan gambar sekaligus
+      const formData = new FormData();
+      formData.append('id', document.getElementById('jEditId').value);
+      formData.append('nama', nama);
+      formData.append('paspor', paspor);
+      formData.append('hp', hp);
+      formData.append('nik', document.getElementById('jNik').value.trim());
+      formData.append('expPaspor', document.getElementById('jExpPaspor').value);
+      formData.append('kelamin', document.getElementById('jKelamin').value);
+      formData.append('tglLahir', document.getElementById('jTglLahir').value);
+      formData.append('email', document.getElementById('jEmail').value.trim());
+      formData.append('paket', document.getElementById('jPaket').value);
+      formData.append('berangkat', document.getElementById('jBerangkat').value);
+      formData.append('status', document.getElementById('jStatus').value);
+      formData.append('mahram', document.getElementById('jMahram').value.trim());
+      formData.append('alamat', document.getElementById('jAlamat').value.trim());
+      
+      // Tambahkan gambar TTD (Base64)
+      formData.append('ttd', currentTtdBase64);
+
+      // Tambahkan semua file fisik ke dalam array
+      actualFiles.forEach((file) => {
+        formData.append('files[]', file);
+      });
+
+      fetch('api_jamaah.php?action=save', {
+        method: 'POST',
+        body: formData // PENTING: Jangan set Content-Type header jika menggunakan FormData
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          closeModal('mJamaah');
+          loadDataJamaah(); 
+          toast(editingJ ? 'Data jamaah berhasil diperbarui!' : 'Jamaah baru berhasil didaftarkan!', 's');
+        } else {
+          alert("Gagal menyimpan data! Error: " + res.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error saving data:', error);
+        alert('Terjadi kesalahan pada sistem.');
+      });
+    }
+
+    function hapusJamaah(id) {
+      hapusId = id;
+      const j = jamaah.find(x => x.id == id);
+      document.getElementById('hapusNama').textContent = j?.nama || '';
+      new bootstrap.Modal(document.getElementById('mHapus')).show();
+    }
+
+    function konfirmasiHapus() {
+      fetch('api_jamaah.php?action=delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: hapusId })
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          closeModal('mHapus');
+          loadDataJamaah(); 
+          toast('Data jamaah berhasil dihapus.', 'd');
+        } else {
+          alert("Gagal menghapus data!");
+        }
+      })
+      .catch(error => console.error('Error deleting data:', error));
+    }
+
+    /* -------- UPLOAD DOKUMEN -------- */
+    function handleUpload(files) {
+      Array.from(files).forEach(f => {
+        actualFiles.push(f); // Simpan objek file fisiknya
+        uploadedFiles.push(f.name+'__'+fmtSz(f.size)); // Teks untuk UI
+      });
+      renderFP();
+    }
+
+    function renderFP() {
+      document.getElementById('fpGrid').innerHTML = uploadedFiles.map((f,i) => {
+        const name = typeof f==='string' ? f.split('__')[0] : f;
+        const sz = typeof f==='string' ? f.split('__')[1]||'' : '';
+        return fileItem(name, sz, i);
+      }).join('');
+    }
+
+    function removeFile(i) { 
+      // Hapus dari UI dan array file fisik, asalkan file tsb baru diupload
+      if(actualFiles[i]) {
+        actualFiles.splice(i, 1);
+      }
+      uploadedFiles.splice(i, 1); 
+      renderFP(); 
+    }
+    
+    function fileItem(name, sz, i) {
+      const ext = name.split('.').pop().toLowerCase();
+      let ico = 'fas fa-file fi-gen';
+      if(['jpg','jpeg','png'].includes(ext)) ico = 'fas fa-file-image fi-img';
+      else if(ext==='pdf') ico = 'fas fa-file-pdf fi-pdf';
+      else if(['doc','docx'].includes(ext)) ico = 'fas fa-file-word fi-doc';
+      return `<div class="fitem">
+        <div class="fdel" onclick="removeFile(${i})"><i class="fas fa-times" style="font-size:8px;"></i></div>
+        <div class="fitem-ico"><i class="${ico}"></i></div>
+        <span class="fitem-name" title="${name}">${name}</span>
+        <span class="fitem-sz">${sz}</span>
+      </div>`;
+    }
+
+    /* -------- VIEW FILES -------- */
+    function lihatFiles(id) {
+      const j = jamaah.find(x => x.id == id);
+      if(!j) return;
+      document.getElementById('mFileSub').textContent = `Dokumen ${j.nama}`;
+      const body = document.getElementById('mFilesBody');
+      const filesArr = j.files || [];
+      
+      if(!filesArr.length) {
+        body.innerHTML = `<div style="text-align:center;padding:30px 0;color:var(--abu-400);"><i class="fas fa-folder-open" style="font-size:40px;margin-bottom:12px;display:block;"></i>Belum ada dokumen yang diupload</div>`;
+      } else {
+        body.innerHTML = filesArr.map(f => {
+          const filename = f.split('__')[0];
+          // Asumsi path folder uploads berada se-level dengan file HTML ini
+          const fileUrl = 'uploads/' + filename; 
+          return `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--krim);border-radius:9px;margin-bottom:8px;border:1px solid var(--abu-100);">
+            <i class="${fileIcon(f)}" style="font-size:20px;width:22px;text-align:center;"></i>
+            <span style="font-size:13.5px;flex:1;">${filename}</span>
+            <a href="${fileUrl}" target="_blank" class="btn-sm-gold" style="font-size:12px;padding:5px 10px;text-decoration:none;"><i class="fas fa-download"></i></a>
+          </div>`;
+        }).join('');
+      }
+      new bootstrap.Modal(document.getElementById('mFiles')).show();
+    }
+    
+    function fileIcon(name) {
+      const ext = name.split('.').pop().toLowerCase();
+      if(['jpg','jpeg','png'].includes(ext)) return 'fas fa-file-image fi-img';
+      if(ext==='pdf') return 'fas fa-file-pdf fi-pdf';
+      if(['doc','docx'].includes(ext)) return 'fas fa-file-word fi-doc';
+      return 'fas fa-file fi-gen';
+    }
+
+    /* -------- TANDA TANGAN (TTD) -------- */
+    function openTTDModal(id) {
+      const j = jamaah.find(x => x.id == id);
+      if(!j) return;
+      document.getElementById('mTTDSub').textContent = `Jamaah: ${j.nama} · ${j.paket || 'Belum pilih paket'}`;
+      const modal = new bootstrap.Modal(document.getElementById('mTTD'));
+      modal.show();
+
+      document.getElementById('mTTD').addEventListener('shown.bs.modal', () => {
+        const c = document.getElementById('mSigCanvas');
+        c.width = c.offsetWidth; c.height = 180;
+        mSigCtx = c.getContext('2d');
+        mSigCtx.lineCap = 'round'; mSigCtx.lineJoin = 'round';
+        c.onmousedown = e => { mSigDrawing=true; mSigCtx.beginPath(); mSigCtx.moveTo(...getPos(c,e)); };
+        c.onmousemove = e => { if(!mSigDrawing)return; mSigCtx.strokeStyle='#0A3622'; mSigCtx.lineWidth=2; mSigCtx.lineTo(...getPos(c,e)); mSigCtx.stroke(); };
+        c.onmouseup = () => mSigDrawing=false;
+        c.onmouseleave = () => mSigDrawing=false;
+        
+        // Touch support
+        c.ontouchstart = e => { e.preventDefault(); mSigDrawing=true; mSigCtx.beginPath(); mSigCtx.moveTo(...getPos(c,e.touches[0])); };
+        c.ontouchmove = e => { e.preventDefault(); if(!mSigDrawing)return; mSigCtx.strokeStyle='#0A3622'; mSigCtx.lineWidth=2; mSigCtx.lineTo(...getPos(c,e.touches[0])); mSigCtx.stroke(); };
+        c.ontouchend = () => mSigDrawing=false;
+      }, {once:true});
+    }
+    
+    function clearMSig() { 
+      const c = document.getElementById('mSigCanvas'); 
+      if(mSigCtx) mSigCtx.clearRect(0,0,c.width,c.height); 
+      currentTtdBase64 = ''; // Hapus data Base64
+    }
+    
+    function applyMSig() { 
+      const c = document.getElementById('mSigCanvas');
+      currentTtdBase64 = c.toDataURL('image/png'); // Tangkap dan simpan di memori
+      closeModal('mTTD'); 
+      toast('Tanda tangan kontrak siap. Klik Simpan Data Jamaah untuk mengunggah!', 's'); 
+    }
+
+    /* -------- INITIALIZATION -------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDataJamaah();
+    });
+</script>
+</body>
+</html>

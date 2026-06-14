@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paket Umroh — Al-Mabrur Travel</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=DM+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<!-- DataTables & Bootstrap CSS -->
+<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ==================== ROOT & GLOBAL ==================== */
+:root {
+  --hijau:     #0A3622;
+  --hijau-2:   #0F4D31;
+  --hijau-3:   #165C3A;
+  --hijau-4:   #1E7A4E;
+  --hijau-mid: #2D9B68;
+  --hijau-lt:  #D1FAE5;
+  --emas:      #C9A84C;
+  --emas-2:    #B5913A;
+  --emas-lt:   #FEF3CD;
+  --krim:      #FDFAF3;
+  --krim-2:    #F5EFD8;
+  --putih:     #FFFFFF;
+  --abu-50:    #F7F9F7;
+  --abu-100:   #EBF0EB;
+  --abu-200:   #D4DFDA;
+  --abu-400:   #8FA89A;
+  --abu-600:   #4D6A5E;
+  --abu-800:   #1C3529;
+  --merah:     #DC2626;
+  --sidebar-w: 270px;
+  --header-h:  64px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--krim);
+  color: var(--abu-800);
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+h1,h2,h3,h4,h5 { font-family: 'Playfair Display', serif; }
+.arabic { font-family: 'Amiri', serif; }
+a { text-decoration: none; }
+
+/* ==================== APP LAYOUT ==================== */
+.sidebar {
+  position: fixed; left: 0; top: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--hijau);
+  z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+}
+.sidebar::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px),
+    repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,255,255,0.015) 20px, rgba(255,255,255,0.015) 21px);
+  pointer-events: none;
+}
+.sidebar-brand { padding: 22px 22px 18px; border-bottom: 1px solid rgba(201,168,76,0.18); position: relative; }
+.brand-row { display: flex; align-items: center; gap: 12px; }
+.brand-emblem { width: 42px; height: 42px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.4); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--emas); flex-shrink: 0; }
+.brand-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 16px; color: #fff; line-height: 1.2; }
+.brand-tagline { font-size: 10.5px; color: rgba(255,255,255,0.4); font-weight: 300; margin-top: 1px; }
+
+.sidebar-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+.nav-section-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.22); padding: 10px 12px 5px; }
+
+.nav-item { display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: 10px; color: rgba(255,255,255,0.55); cursor: pointer; font-size: 13.5px; font-weight: 500; transition: all 0.18s; margin-bottom: 2px; user-select: none; position: relative; }
+.nav-item i { width: 20px; text-align: center; font-size: 15px; }
+.nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
+.nav-item.active { background: var(--emas); color: var(--hijau); font-weight: 600; }
+.nav-item.active i { color: var(--hijau); }
+.nav-chip { margin-left: auto; background: rgba(201,168,76,0.2); color: var(--emas); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(201,168,76,0.25); }
+.nav-item.active .nav-chip { background: rgba(10,54,34,0.2); color: var(--hijau); border-color: rgba(10,54,34,0.15); }
+
+.sidebar-footer { padding: 14px 12px 18px; border-top: 1px solid rgba(201,168,76,0.15); position: relative; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.user-row:hover { background: rgba(255,255,255,0.06); }
+.user-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--hijau); flex-shrink: 0; border: 2px solid rgba(201,168,76,0.3); }
+.user-name { font-size: 13.5px; font-weight: 600; color: #fff; line-height: 1.2; }
+.user-role { font-size: 11px; color: rgba(255,255,255,0.38); }
+.user-logout { margin-left: auto; color: rgba(255,255,255,0.28); font-size: 15px; transition: color 0.15s; }
+.user-row:hover .user-logout { color: #F87171; }
+
+.topbar { position: fixed; left: var(--sidebar-w); right: 0; top: 0; height: var(--header-h); background: var(--putih); border-bottom: 1px solid var(--abu-100); display: flex; align-items: center; padding: 0 28px; z-index: 50; gap: 14px; }
+.topbar-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 600; color: var(--hijau); }
+.topbar-crumb { font-size: 12px; color: var(--abu-400); margin-top: 1px; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.tb-btn { width: 36px; height: 36px; border-radius: 9px; border: 1.5px solid var(--abu-100); background: #fff; display: flex; align-items: center; justify-content: center; color: var(--abu-600); cursor: pointer; font-size: 14px; transition: all 0.15s; position: relative; }
+.tb-btn:hover { background: var(--abu-50); color: var(--hijau); border-color: var(--abu-200); }
+.tb-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--emas); border-radius: 50%; border: 1.5px solid #fff; }
+.tb-user-chip { display: flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; background: var(--hijau); border-radius: 999px; cursor: pointer; }
+.tb-user-chip .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--emas), #A07830); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--hijau); }
+.tb-user-chip span { font-size: 13px; font-weight: 600; color: #fff; }
+
+.main { margin-left: var(--sidebar-w); padding: 28px; padding-top: calc(var(--header-h) + 28px); min-height: 100vh; }
+.ccard { background: var(--putih); border: 1px solid var(--abu-100); border-radius: 16px; overflow: hidden; margin-bottom: 20px; }
+.ccard-head { padding: 16px 22px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--abu-100); }
+.ccard-head h3 { font-size: 15.5px; font-weight: 600; color: var(--hijau); flex: 1; margin: 0; }
+.ccard-head .head-orn { color: var(--emas); font-size: 18px; }
+.ccard-body { padding: 22px; }
+
+/* ==================== BUTTONS & BADGES ==================== */
+.btn-g { background: var(--hijau); color: #fff; border: none; border-radius: 9px; padding: 9px 18px; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-g:hover { background: var(--hijau-2); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,54,34,0.25); color:#fff; }
+.btn-out { background: #fff; color: var(--abu-800); border: 1.5px solid var(--abu-200); border-radius: 9px; padding: 9px 18px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 13.5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.18s; white-space: nowrap; }
+.btn-out:hover { background: var(--abu-50); border-color: var(--abu-400); }
+.btn-sm-edit { background: #ECFDF5; color: var(--hijau-4); border: 1px solid #A7F3D0; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-edit:hover { background: #D1FAE5; }
+.btn-sm-del { background: #FEF2F2; color: var(--merah); border: 1px solid #FECACA; border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+.btn-sm-del:hover { background: #FEE2E2; }
+
+.badge-status { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.bs-lunas { background: #DCFCE7; color: #15803D; }
+.bs-dp { background: #FEF3C7; color: #B45309; }
+.bs-batal { background: #FEE2E2; color: #B91C1C; }
+
+/* ==================== FORMS & MODALS ==================== */
+.flbl { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--abu-600); margin-bottom: 7px; }
+.req { color: var(--merah); }
+.finput { width: 100%; border: 1.5px solid var(--abu-200); border-radius: 10px; padding: 10px 14px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--abu-800); background: var(--abu-50); outline: none; transition: all 0.18s; }
+.finput:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); background: #fff; }
+select.finput { cursor: pointer; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.fgroup { margin-bottom: 16px; }
+
+.modal-content { border: none; border-radius: 20px; overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.2); }
+.mhead { background: var(--hijau); padding: 20px 24px; display: flex; align-items: center; gap: 12px; border-bottom: none; position: relative; }
+.mhead::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: rgba(201,168,76,0.2); }
+.mhead-ico { width: 38px; height: 38px; background: rgba(201,168,76,0.15); border: 1.5px solid rgba(201,168,76,0.3); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--emas); }
+.mhead h5 { font-size: 16px; font-weight: 700; color: #fff; margin: 0; }
+.mhead p { font-size: 11.5px; color: rgba(255,255,255,0.4); margin: 1px 0 0; font-weight: 300; }
+.mclose { margin-left: auto; background: rgba(255,255,255,0.1); border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.6); font-size: 13px; transition: all 0.15s; }
+.mclose:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.mbody { padding: 24px; }
+.mfoot { padding: 16px 24px; background: var(--krim); border-top: 1px solid var(--abu-100); display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ==================== DATATABLES ==================== */
+table.dataTable thead th { background: var(--krim); color: var(--abu-600); font-family: 'DM Sans', sans-serif; font-size: 11.5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1.5px solid var(--abu-100) !important; border-top: none !important; padding: 12px 16px !important; white-space: nowrap; }
+table.dataTable tbody td { padding: 13px 16px !important; border-bottom: 1px solid var(--abu-100) !important; vertical-align: middle; font-size: 13.5px; }
+table.dataTable tbody tr:hover td { background: var(--krim); }
+.dt-buttons .btn { border-radius: 8px !important; font-size: 12px !important; padding: 7px 12px !important; font-weight: 500 !important; border-color: var(--abu-200) !important; color: var(--abu-600) !important; background: #fff !important; }
+.dt-buttons .btn:hover { background: var(--krim) !important; color: var(--hijau) !important; }
+.dataTables_filter input { border: 1.5px solid var(--abu-200); border-radius: 8px; padding: 7px 12px; font-size: 13.5px; outline: none; }
+.dataTables_filter input:focus { border-color: var(--hijau-4); box-shadow: 0 0 0 3px rgba(30,122,78,0.1); }
+.dataTables_length select { border: 1.5px solid var(--abu-200); border-radius: 8px; padding: 6px 10px; font-size: 13.5px; outline: none; }
+
+/* ==================== PAKET CARDS ==================== */
+.paket-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; margin-bottom: 20px; }
+.paket-card { background: #fff; border: 1.5px solid var(--abu-100); border-radius: 16px; overflow: hidden; transition: all 0.2s; cursor: pointer; }
+.paket-card:hover { border-color: var(--hijau-mid); box-shadow: 0 8px 24px rgba(10,54,34,0.1); transform: translateY(-2px); }
+.paket-card.featured { border-color: var(--emas); }
+
+.pk-top { padding: 20px; background: var(--hijau); position: relative; overflow: hidden; }
+.pk-top::after { content: ''; position: absolute; right: -20px; top: -20px; width: 90px; height: 90px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,0.2) 0%, transparent 70%); }
+.pk-badge { display: inline-block; background: var(--emas); color: var(--hijau); font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 10px; }
+.pk-name { font-family: 'Playfair Display', serif; font-size: 18px; color: #fff; margin-bottom: 4px; }
+.pk-dur { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+.pk-body { padding: 16px 20px; }
+.pk-price { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--hijau); font-weight: 700; margin-bottom: 12px; }
+.pk-price span { font-size: 13px; font-weight: 400; color: var(--abu-400); font-family: 'DM Sans', sans-serif; }
+
+.pk-feature { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--abu-600); margin-bottom: 7px; }
+.pk-feature i { color: var(--hijau-4); font-size: 13px; width: 14px; }
+.pk-feature.x i { color: #D1D5DB; }
+.pk-feature.x { color: var(--abu-400); }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--abu-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--abu-400); }
+
+@media(max-width:768px) {
+  .sidebar { transform: translateX(-100%); }
+  .topbar, .main { left: 0 !important; margin-left: 0 !important; }
+  .frow { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-row">
+        <div class="brand-emblem"><i class="fas fa-mosque"></i></div>
+        <div>
+          <div class="brand-name">Al-Mabrur Travel</div>
+          <div class="brand-tagline">Sistem Manajemen Umroh</div>
+        </div>
+      </div>
+      <div class="brand-arabic">السفر إلى بيت الله</div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section-lbl">Utama</div>
+      <a href="dashboard.html" class="nav-item">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+      <a href="jamaah.html" class="nav-item">
+        <i class="fas fa-users"></i> Data Jamaah
+        <!-- Hapus badge jamaah manual, akan dinamis jika ditambahkan logicnya, kita hapus sementara -->
+      </a>
+      <!-- Active state di menu Paket -->
+      <a href="paket.html" class="nav-item active">
+        <i class="fas fa-suitcase-rolling"></i> Paket Umroh
+      </a>
+
+      <div class="nav-section-lbl">Administrasi</div>
+      <a href="dokumen.html" class="nav-item">
+        <i class="fas fa-file-contract"></i> Dokumen & Kontrak
+      </a>
+      <a href="ttd.html" class="nav-item">
+        <i class="fas fa-signature"></i> Tanda Tangan Digital
+      </a>
+
+      <div class="nav-section-lbl">Akun</div>
+      <a href="profil.html" class="nav-item">
+        <i class="fas fa-user-circle"></i> Profil Admin
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-row" onclick="doLogout()">
+        <div class="user-av">AM</div>
+        <div>
+          <div class="user-name">Admin Mabrur</div>
+          <div class="user-role">Super Administrator</div>
+        </div>
+        <i class="fas fa-sign-out-alt user-logout"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div>
+      <div class="topbar-title">Paket Umroh</div>
+      <div class="topbar-crumb">Beranda / Paket Umroh</div>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-btn" title="Notifikasi"><i class="fas fa-bell"></i><div class="tb-dot"></div></div>
+      <div class="tb-btn" title="Pengaturan"><i class="fas fa-cog"></i></div>
+      <div class="tb-user-chip"><div class="av">AM</div><span>Admin</span></div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="ccard" style="margin-bottom:20px;">
+      <div class="ccard-head">
+        <i class="fas fa-suitcase-rolling head-orn"></i>
+        <h3>Paket Perjalanan Umroh</h3>
+        <button class="btn-g" style="margin-left:auto;" onclick="openTambahPaket()">
+          <i class="fas fa-plus"></i> Tambah Paket
+        </button>
+      </div>
+      <div class="ccard-body">
+        <div class="paket-grid" id="paketGrid"></div>
+      </div>
+    </div>
+
+    <div class="ccard">
+      <div class="ccard-head">
+        <i class="fas fa-table head-orn"></i>
+        <h3>Tabel Paket (Ekspor Data)</h3>
+      </div>
+      <div class="ccard-body">
+        <div style="overflow-x:auto;">
+          <table id="tablePaket" class="table table-hover w-100">
+            <thead>
+              <tr>
+                <th>#</th><th>Nama Paket</th><th>Durasi</th><th>Hotel Makkah</th>
+                <th>Hotel Madinah</th><th>Maskapai</th><th>Harga</th><th>Kuota</th><th>Status</th><th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="bodyPaket"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================= MODALS ========================= -->
+  
+  <!-- MODAL: ADD/EDIT PAKET -->
+  <div class="modal fade" id="mPaket" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="mhead">
+          <div class="mhead-ico"><i class="fas fa-suitcase-rolling"></i></div>
+          <div><h5 id="mPTitle">Tambah Paket Umroh</h5><p>Isi detail paket perjalanan</p></div>
+          <button class="mclose" onclick="closeModal('mPaket')"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="mbody">
+          <input type="hidden" id="pEditId">
+          <div class="frow">
+            <div class="fgroup"><label class="flbl">Nama Paket <span class="req">*</span></label><input class="finput" id="pNama" placeholder="Paket Reguler 9 Hari"></div>
+            <div class="fgroup"><label class="flbl">Durasi (Hari)</label><input type="number" class="finput" id="pDur" placeholder="9" min="7"></div>
+            <div class="fgroup"><label class="flbl">Hotel Makkah <span class="req">*</span></label><input class="finput" id="pHMakkah" placeholder="Hilton Makkah Convention"></div>
+            <div class="fgroup"><label class="flbl">Bintang Hotel Makkah</label>
+              <select class="finput" id="pBMakkah">
+                <option>★★★ (3 Bintang)</option><option>★★★★ (4 Bintang)</option><option>★★★★★ (5 Bintang)</option>
+              </select>
+            </div>
+            <div class="fgroup"><label class="flbl">Hotel Madinah</label><input class="finput" id="pHMadinah" placeholder="Novotel Madinah"></div>
+            <div class="fgroup"><label class="flbl">Maskapai</label>
+              <select class="finput" id="pMaskapai">
+                <option>Garuda Indonesia</option><option>Saudi Arabian Airlines</option><option>Emirates</option><option>Air Arabia</option><option>Batik Air</option>
+              </select>
+            </div>
+            <div class="fgroup"><label class="flbl">Harga per Orang (Rp)</label><input type="number" class="finput" id="pHarga" placeholder="25000000"></div>
+            <div class="fgroup"><label class="flbl">Kuota Jamaah</label><input type="number" class="finput" id="pKuota" placeholder="40"></div>
+            <div class="fgroup"><label class="flbl">Tanggal Keberangkatan</label><input type="date" class="finput" id="pBerangkat"></div>
+            <div class="fgroup"><label class="flbl">Status Paket</label>
+              <select class="finput" id="pStatus">
+                <option value="Tersedia">Tersedia</option><option value="Penuh">Penuh</option><option value="Tutup">Ditutup</option>
+              </select>
+            </div>
+          </div>
+          <div class="fgroup">
+            <label class="flbl">Fasilitas & Keterangan</label>
+            <textarea class="finput" id="pFasilitas" rows="3" placeholder="Gunakan koma (,) untuk memisahkan fasilitas. Contoh: Visa, Transportasi AC, Hotel Bintang 4..." style="resize:vertical;"></textarea>
+          </div>
+        </div>
+        <div class="mfoot">
+          <button class="btn-out" onclick="closeModal('mPaket')"><i class="fas fa-times"></i> Batal</button>
+          <button class="btn-g" onclick="savePaket()"><i class="fas fa-save"></i> Simpan Paket</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================= CORE SCRIPTS ========================= -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+  <script>
+    /* -------- VARIABEL GLOBAL -------- */
+    let paketList = []; // Akan diisi dari database
+    let editingP = null;
+    let dtP = null;
+
+    /* -------- UTILS -------- */
+    function closeModal(id) { bootstrap.Modal.getInstance(document.getElementById(id))?.hide(); }
+    function toast(msg,type) {
+      const cfg={s:{bg:'#F0FDF4',border:'#A7F3D0',txt:'#15803D',ico:'check-circle'},d:{bg:'#FEF2F2',border:'#FECACA',txt:'#B91C1C',ico:'trash-alt'}};
+      const c=cfg[type]||cfg.s;
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;bottom:24px;right:24px;background:${c.bg};color:${c.txt};border:1px solid ${c.border};border-radius:10px;padding:12px 18px;font-size:13.5px;font-weight:500;display:flex;align-items:center;gap:10px;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.12);transition:all 0.3s;max-width:320px;`;
+      el.innerHTML=`<i class="fas fa-${c.ico}"></i>${msg}`;
+      document.body.appendChild(el);
+      setTimeout(()=>{el.style.opacity='0';el.style.transform='translateX(20px)';},2800);
+      setTimeout(()=>el.remove(),3200);
+    }
+    function doLogout() { if(confirm('Yakin ingin keluar?')) window.location.href='login.html'; }
+
+    /* -------- FETCH DATA PAKET -------- */
+    function loadDataPaket() {
+      fetch('api_paket.php?action=get')
+        .then(response => response.json())
+        .then(data => {
+          paketList = data;
+          renderPaketCards();
+          renderPaketTable();
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    /* -------- RENDER PAKET CARDS -------- */
+    function renderPaketCards() {
+      const el = document.getElementById('paketGrid');
+      if (paketList.length === 0) {
+        el.innerHTML = '<div style="color:var(--abu-400); text-align:center; grid-column: 1 / -1; padding: 20px;">Belum ada paket umroh. Silakan tambah paket baru.</div>';
+        return;
+      }
+
+      el.innerHTML = paketList.map((p,i) => {
+        // Pisahkan teks fasilitas berdasarkan koma untuk dijadikan list centang di Card
+        let features = p.fasilitas ? p.fasilitas.split(',') : ['Paket lengkap'];
+        
+        return `
+        <div class="paket-card ${i===0?'featured':''}">
+          <div class="pk-top">
+            ${i===0?'<span class="pk-badge">⭐ Terbaru</span><br>':''}
+            <div class="pk-name">${p.nama}</div>
+            <div class="pk-dur"><i class="fas fa-clock"></i> ${p.durasi} Hari · ${p.maskapai}</div>
+          </div>
+          <div class="pk-body">
+            <div class="pk-price">Rp ${(p.harga/1000000).toFixed(0)} Juta <span>/ orang</span></div>
+            ${features.map(f => `<div class="pk-feature"><i class="fas fa-check"></i>${f.trim()}</div>`).join('')}
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--abu-100);display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;color:var(--abu-400);">Kuota: ${p.kuota} orang</span>
+              <button class="btn-sm-edit" onclick="editPaket(${p.id})"><i class="fas fa-pencil-alt"></i> Edit</button>
+            </div>
+          </div>
+        </div>`
+      }).join('');
+    }
+
+    /* -------- RENDER PAKET TABLE -------- */
+    function renderPaketTable() {
+      const tbody = document.getElementById('bodyPaket');
+      tbody.innerHTML = '';
+      paketList.forEach((p,i) => {
+        const bsCls = p.status==='Tersedia'?'bs-lunas':p.status==='Penuh'?'bs-batal':'bs-dp';
+        const hargaFormat = new Intl.NumberFormat('id-ID').format(p.harga);
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td><strong>${p.nama}</strong></td>
+          <td>${p.durasi} hari</td>
+          <td>${p.hMakkah} <span style="font-size:11px;color:var(--emas-2);">${p.bMakkah}</span></td>
+          <td>${p.hMadinah}</td>
+          <td>${p.maskapai}</td>
+          <td style="font-weight:600;color:var(--hijau);">Rp ${hargaFormat}</td>
+          <td>${p.kuota} orang</td>
+          <td><span class="badge-status ${bsCls}">${p.status}</span></td>
+          <td>
+            <div style="display:flex;gap:5px;">
+              <button class="btn-sm-edit" onclick="editPaket(${p.id})"><i class="fas fa-pencil-alt"></i></button>
+              <button class="btn-sm-del" onclick="hapusPaket(${p.id})"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+      if(dtP) { dtP.destroy(); dtP = null; }
+      dtP = $('#tablePaket').DataTable({
+        dom:"<'row'<'col-sm-6 d-flex align-items-center gap-2'lB><'col-sm-6 d-flex justify-content-end'f>><'row'<'col-12'tr>><'row'<'col-sm-5'i><'col-sm-7 d-flex justify-content-end'p>>",
+        buttons:[
+          {extend:'copy',text:'<i class="fas fa-copy me-1"></i>Copy',className:'btn btn-sm'},
+          {extend:'excel',text:'<i class="fas fa-file-excel me-1"></i>Excel',className:'btn btn-sm',filename:'paket-umroh'},
+          {extend:'pdf',text:'<i class="fas fa-file-pdf me-1"></i>PDF',className:'btn btn-sm',filename:'paket-umroh'},
+        ],
+        language:{search:'_INPUT_',searchPlaceholder:'Cari paket...',lengthMenu:'Tampilkan _MENU_',info:'_START_–_END_ dari _TOTAL_',paginate:{previous:'‹',next:'›'}},
+        pageLength:5, columnDefs:[{targets:[9],orderable:false}], order:[[0,'asc']]
+      });
+    }
+
+    /* -------- CRUD PAKET -------- */
+    function openTambahPaket() {
+      editingP = null;
+      document.getElementById('pEditId').value = '';
+      document.getElementById('mPTitle').textContent = 'Tambah Paket Umroh';
+      ['pNama','pHMakkah','pHMadinah','pFasilitas','pDur','pHarga','pKuota','pBerangkat'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('pMaskapai').value = 'Garuda Indonesia';
+      document.getElementById('pStatus').value = 'Tersedia';
+      new bootstrap.Modal(document.getElementById('mPaket')).show();
+    }
+
+    function editPaket(id) {
+      const p = paketList.find(x => x.id == id);
+      if(!p) return;
+      editingP = id;
+      
+      document.getElementById('pEditId').value = id;
+      document.getElementById('mPTitle').textContent = 'Edit Paket Umroh';
+      document.getElementById('pNama').value = p.nama;
+      document.getElementById('pDur').value = p.durasi;
+      document.getElementById('pHMakkah').value = p.hMakkah;
+      document.getElementById('pBMakkah').value = p.bMakkah;
+      document.getElementById('pHMadinah').value = p.hMadinah;
+      document.getElementById('pMaskapai').value = p.maskapai;
+      document.getElementById('pHarga').value = p.harga;
+      document.getElementById('pKuota').value = p.kuota;
+      document.getElementById('pBerangkat').value = p.berangkat || '';
+      document.getElementById('pStatus').value = p.status;
+      document.getElementById('pFasilitas').value = p.fasilitas;
+      
+      new bootstrap.Modal(document.getElementById('mPaket')).show();
+    }
+
+    function savePaket() {
+      const nama = document.getElementById('pNama').value.trim();
+      if(!nama) { alert('Nama paket wajib diisi!'); return; }
+      
+      const data = {
+        id: document.getElementById('pEditId').value,
+        nama: nama,
+        durasi: document.getElementById('pDur').value || 9,
+        hMakkah: document.getElementById('pHMakkah').value,
+        bMakkah: document.getElementById('pBMakkah').value,
+        hMadinah: document.getElementById('pHMadinah').value,
+        maskapai: document.getElementById('pMaskapai').value,
+        harga: document.getElementById('pHarga').value || 0,
+        kuota: document.getElementById('pKuota').value || 40,
+        berangkat: document.getElementById('pBerangkat').value,
+        status: document.getElementById('pStatus').value,
+        fasilitas: document.getElementById('pFasilitas').value,
+      };
+
+      fetch('api_paket.php?action=save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          closeModal('mPaket');
+          loadDataPaket(); // Refresh data dari DB
+          toast(editingP ? 'Paket berhasil diperbarui!' : 'Paket baru berhasil ditambahkan!', 's');
+        } else {
+          alert("Gagal menyimpan data! Error: " + res.message);
+        }
+      })
+      .catch(error => console.error('Error saving data:', error));
+    }
+
+    function hapusPaket(id) {
+      if(confirm('Yakin ingin menghapus paket ini?')) {
+        fetch('api_paket.php?action=delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: id })
+        })
+        .then(response => response.json())
+        .then(res => {
+          if (res.status === 'success') {
+            loadDataPaket(); // Refresh data dari DB
+            toast('Paket berhasil dihapus.', 'd');
+          }
+        })
+        .catch(error => console.error('Error deleting data:', error));
+      }
+    }
+
+    /* -------- INITIALIZATION -------- */
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDataPaket();
+    });
+  </script>
+</body>
+</html>
